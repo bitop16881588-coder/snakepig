@@ -1,0 +1,1524 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>猪鼻蛇基因圖鑑 · Heterodon nasicus</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400;1,9..144,500&family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --sand:#E9DFC9; --paper:#F7F2E7; --paper-2:#FBF8F0;
+    --ink:#2B2620; --ink-soft:#6E6456; --line:#D6C9AC;
+    --rec:#7A6CA8; --inc:#C07B33; --dom:#5C6647; --combo:#A4502E; --other:#8A8275;
+    --amber:#C07B33; --rust:#A4502E;
+    --shadow:0 1px 2px rgba(43,38,32,.06),0 8px 24px rgba(43,38,32,.07);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--sand);
+    background-image:radial-gradient(circle at 18% 12%,rgba(192,123,51,.08),transparent 42%),
+                     radial-gradient(circle at 82% 78%,rgba(122,108,168,.07),transparent 45%);
+    color:var(--ink);
+    font-family:"Noto Sans TC",system-ui,sans-serif;
+    line-height:1.65; -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+
+  /* ---------- Tabs ---------- */
+  .tabs{display:flex;gap:8px;padding:18px 0 4px;flex-wrap:wrap}
+  .tab{font-family:"Noto Serif TC",serif;font-weight:700;font-size:16px;cursor:pointer;border:1px solid var(--line);
+       background:var(--paper);color:var(--ink-soft);padding:9px 20px;border-radius:12px;transition:.16s}
+  .tab:hover{border-color:var(--ink-soft);color:var(--ink)}
+  .tab[data-on="1"]{background:var(--ink);color:var(--paper-2);border-color:var(--ink)}
+  [hidden]{display:none!important}
+
+  /* ---------- Header ---------- */
+  header{padding:46px 0 26px;border-bottom:1px solid var(--line)}
+  .crest{display:flex;align-items:center;gap:16px}
+  .crest svg{width:60px;height:60px;flex:0 0 auto}
+  .eyebrow{font-family:"Fraunces",serif;font-style:italic;font-size:15px;letter-spacing:.04em;color:var(--rust)}
+  h1{font-family:"Noto Serif TC",serif;font-weight:900;font-size:clamp(30px,6vw,46px);line-height:1.05;letter-spacing:-.01em}
+  .sub{font-family:"Fraunces",serif;font-style:italic;font-size:clamp(15px,2.5vw,19px);color:var(--ink-soft);margin-top:6px}
+  .lede{margin-top:18px;max-width:62ch;color:var(--ink-soft);font-size:15px}
+  .stats{display:flex;flex-wrap:wrap;gap:26px;margin-top:24px}
+  .stat .n{font-family:"Noto Serif TC",serif;font-weight:900;font-size:30px;line-height:1}
+  .stat .l{font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft);margin-top:4px}
+
+  /* ---------- Controls ---------- */
+  .controls{position:sticky;top:0;z-index:30;background:linear-gradient(var(--sand) 78%,rgba(233,223,201,0));padding:18px 0 14px;margin-bottom:8px}
+  .search{display:flex;align-items:center;gap:10px;background:var(--paper);border:1px solid var(--line);border-radius:13px;padding:11px 15px;box-shadow:var(--shadow)}
+  .search svg{width:18px;height:18px;flex:0 0 auto;opacity:.5}
+  .search input{border:0;background:transparent;font:inherit;font-size:16px;color:var(--ink);width:100%;outline:none}
+  .search input::placeholder{color:#a99c82}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:13px}
+  .chip{font:inherit;font-size:13.5px;cursor:pointer;border:1px solid var(--line);background:var(--paper);color:var(--ink-soft);
+        padding:6px 13px;border-radius:999px;transition:.16s;display:inline-flex;align-items:center;gap:7px}
+  .chip:hover{border-color:var(--ink-soft)}
+  .chip[data-on="1"]{background:var(--ink);color:var(--paper-2);border-color:var(--ink)}
+  .chip .dot{width:9px;height:9px;border-radius:50%}
+  .dot.rec{background:var(--rec)} .dot.inc{background:var(--inc)} .dot.dom{background:var(--dom)}
+  .dot.combo{background:var(--combo)} .dot.other{background:var(--other)}
+
+  /* ---------- Grid / cards ---------- */
+  .count{font-size:13px;color:var(--ink-soft);margin:6px 2px 16px;letter-spacing:.02em}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px}
+  .card{background:var(--paper);border:1px solid var(--line);border-radius:16px;overflow:hidden;
+        box-shadow:var(--shadow);cursor:pointer;transition:transform .18s ease,box-shadow .18s ease;position:relative}
+  .card:hover{transform:translateY(-3px);box-shadow:0 2px 4px rgba(43,38,32,.07),0 16px 34px rgba(43,38,32,.12)}
+  .plate{height:152px;position:relative;border-bottom:1px solid var(--line);overflow:hidden}
+  .ill{position:absolute;inset:0;width:100%;height:100%;display:block;z-index:0}
+  .photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;z-index:1}
+  .plate .topscrim{position:absolute;top:0;left:0;right:0;height:50px;z-index:2;pointer-events:none;
+        background:linear-gradient(rgba(0,0,0,.28),transparent)}
+  .spec{position:absolute;top:9px;left:12px;z-index:3;font-family:"Fraunces",serif;font-size:12px;font-style:italic;
+        color:rgba(255,255,255,.95);text-shadow:0 1px 3px rgba(0,0,0,.45);letter-spacing:.03em}
+  .badge{position:absolute;top:8px;right:10px;z-index:3;font-size:11px;letter-spacing:.06em;padding:3px 9px;border-radius:999px;
+         background:rgba(247,242,231,.94);font-weight:700;box-shadow:0 1px 3px rgba(0,0,0,.12)}
+  .badge.rec{color:var(--rec)} .badge.inc{color:var(--inc)} .badge.dom{color:var(--dom)}
+  .badge.combo{color:var(--combo)} .badge.other{color:var(--other)}
+  .cbody{padding:14px 16px 16px}
+  .cbody h3{font-family:"Noto Serif TC",serif;font-weight:700;font-size:19px;line-height:1.15}
+  .cbody .en{font-family:"Fraunces",serif;font-style:italic;color:var(--ink-soft);font-size:14px;margin-top:1px}
+  .cbody p{font-size:13.5px;color:var(--ink-soft);margin-top:9px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .warn{margin-top:10px;font-size:12px;color:var(--rust);display:flex;gap:6px;align-items:flex-start}
+  .warn svg{width:14px;height:14px;flex:0 0 auto;margin-top:2px}
+
+  .empty{text-align:center;padding:60px 20px;color:var(--ink-soft)}
+  .empty b{display:block;font-family:"Noto Serif TC",serif;font-size:20px;color:var(--ink);margin-bottom:6px}
+
+  /* ---------- Photo tools ---------- */
+  .phototools{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:0 2px 16px}
+  .ptbtn{font:inherit;font-size:13px;cursor:pointer;border:1px solid var(--line);background:var(--paper);
+         color:var(--ink);padding:8px 13px;border-radius:10px;transition:.15s}
+  .ptbtn:hover{border-color:var(--ink-soft)}
+  .ptbtn.primary{background:var(--ink);color:var(--paper-2);border-color:var(--ink)}
+  .ptbtn.on{background:var(--inc);color:#fff;border-color:var(--inc)}
+  .ptinfo{font-size:12.5px;color:var(--ink-soft);margin-left:2px}
+  body.editing .card{cursor:copy}
+  body.editing .plate{outline:2px dashed transparent;outline-offset:-4px}
+  body.editing .card:hover .plate,.plate.drop{outline-color:rgba(192,123,51,.9)}
+  .editbadge{position:absolute;inset:0;z-index:4;display:none;align-items:center;justify-content:center;
+        flex-direction:column;gap:3px;background:rgba(28,24,19,.42);color:#fff;font-size:13px;text-align:center;padding:8px}
+  .editbadge small{font-size:11px;opacity:.85;font-family:"Fraunces",serif;font-style:italic}
+  body.editing .editbadge{display:flex}
+  .haspic{position:absolute;bottom:8px;left:10px;z-index:3;font-size:11px;background:rgba(92,102,71,.92);color:#fff;
+        padding:2px 8px;border-radius:999px;display:none}
+  .card.has .haspic{display:inline-block}
+
+  /* ---------- Modal ---------- */
+  .scrim{position:fixed;inset:0;background:rgba(28,24,19,.5);backdrop-filter:blur(3px);z-index:90;
+         display:none;align-items:flex-end;justify-content:center;padding:0}
+  .scrim[data-open="1"]{display:flex}
+  .sheet{background:var(--paper-2);width:100%;max-width:640px;max-height:92vh;overflow-y:auto;
+         border-radius:22px 22px 0 0;box-shadow:0 -10px 50px rgba(0,0,0,.3);animation:rise .26s cubic-bezier(.2,.8,.25,1)}
+  @media(min-width:680px){.scrim{align-items:center;padding:24px}.sheet{border-radius:22px}}
+  @keyframes rise{from{transform:translateY(26px);opacity:.6}to{transform:translateY(0);opacity:1}}
+  .sheet .hero{height:188px;position:relative;overflow:hidden}
+  .sheet .hero .x{position:absolute;top:12px;right:12px;width:34px;height:34px;border:0;border-radius:50%;
+        background:rgba(247,242,231,.92);cursor:pointer;font-size:18px;color:var(--ink);display:grid;place-items:center;box-shadow:var(--shadow)}
+  .sheet .hero .spec{top:14px;left:16px;font-size:13px}
+  .scont{padding:20px 22px 30px}
+  .scont .badge2{display:inline-block;font-size:11.5px;letter-spacing:.06em;padding:4px 11px;border-radius:999px;font-weight:700;color:#fff;margin-bottom:10px}
+  .b-rec{background:var(--rec)} .b-inc{background:var(--inc)} .b-dom{background:var(--dom)} .b-combo{background:var(--combo)} .b-other{background:var(--other)}
+  .scont h2{font-family:"Noto Serif TC",serif;font-weight:900;font-size:27px;line-height:1.1}
+  .scont .en2{font-family:"Fraunces",serif;font-style:italic;color:var(--ink-soft);font-size:16px;margin-top:2px}
+  .aka{margin-top:10px;font-size:13px;color:var(--ink-soft)}
+  .aka b{color:var(--ink);font-weight:500}
+  .scont .desc{margin-top:16px;font-size:15px;line-height:1.72}
+  .meta{margin-top:18px;border-top:1px solid var(--line);padding-top:16px;display:grid;gap:12px}
+  .row{display:grid;grid-template-columns:84px 1fr;gap:12px;font-size:14px}
+  .row .k{color:var(--ink-soft);font-size:12.5px;letter-spacing:.08em;padding-top:1px}
+  .warn2{margin-top:16px;background:rgba(164,80,46,.08);border:1px solid rgba(164,80,46,.25);border-radius:12px;
+         padding:12px 14px;font-size:13.5px;color:#7d3a20;display:flex;gap:9px}
+  .warn2 svg{width:17px;height:17px;flex:0 0 auto;margin-top:2px}
+
+  /* ---------- Calculator ---------- */
+  .calc{margin:24px 0 10px;background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:24px 22px;box-shadow:var(--shadow)}
+  .calc h2{font-family:"Noto Serif TC",serif;font-weight:900;font-size:24px}
+  .calc .ce{font-family:"Fraunces",serif;font-style:italic;color:var(--rust);font-size:14px}
+  .calc p.hint{font-size:13.5px;color:var(--ink-soft);margin-top:6px}
+  .crow{display:flex;flex-wrap:wrap;gap:14px;margin-top:18px;align-items:flex-end}
+  .grow{display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end;padding:12px;border:1px solid var(--line);border-radius:13px;background:var(--paper-2);margin-bottom:10px}
+  .grow .field{flex:1;min-width:120px}
+  .grow-x{flex:0 0 auto;width:34px;height:40px;border:1px solid var(--line);border-radius:10px;background:var(--paper);
+          color:var(--ink-soft);cursor:pointer;font-size:14px;transition:.15s}
+  .grow-x:hover:not(:disabled){border-color:var(--rust);color:var(--rust)}
+  .grow-x:disabled{opacity:.35;cursor:not-allowed}
+  #g-add{margin:2px 0 4px}
+  .combo-tag{color:var(--rust);font-size:12px;font-family:"Fraunces",serif;font-style:italic}
+  .hets{margin-top:16px;border-top:1px solid var(--line);padding-top:14px}
+  .hets-t{font-size:12px;letter-spacing:.1em;color:var(--ink-soft);margin-bottom:7px}
+  .hets-l{font-size:13px;color:var(--ink-soft);line-height:1.7}
+  .hets-l b{color:var(--ink);font-weight:500}
+  .field{display:flex;flex-direction:column;gap:5px;flex:1;min-width:140px}
+  .field label{font-size:12px;letter-spacing:.08em;color:var(--ink-soft)}
+  select{font:inherit;font-size:15px;padding:10px 12px;border:1px solid var(--line);border-radius:11px;background:var(--paper-2);color:var(--ink);cursor:pointer}
+  .res{margin-top:20px;border-top:1px solid var(--line);padding-top:18px;display:none}
+  .res[data-show="1"]{display:block}
+  .res h4{font-size:13px;letter-spacing:.1em;color:var(--ink-soft);margin-bottom:12px}
+  .bar{display:flex;align-items:center;gap:12px;margin-bottom:11px}
+  .bar .lab{flex:0 0 178px;width:178px;font-size:13px;line-height:1.35;white-space:normal}
+  .bar .track{flex:1;height:24px;background:var(--sand);border-radius:7px;overflow:hidden;position:relative}
+  .bar .fill{height:100%;border-radius:7px;transition:width .5s cubic-bezier(.2,.8,.25,1)}
+  .bar .pct{width:54px;text-align:right;font-family:"Fraunces",serif;font-weight:600;font-size:15px;flex:0 0 auto}
+
+  /* ---------- Breeding timeline ---------- */
+  input[type=date]{font:inherit;font-size:15px;padding:9px 12px;border:1px solid var(--line);border-radius:11px;
+                   background:var(--paper-2);color:var(--ink);cursor:pointer;width:100%}
+  .bt-line{display:grid;gap:0;margin-top:4px}
+  .bt-step{display:grid;grid-template-columns:16px 1fr;gap:14px;position:relative;padding-bottom:20px}
+  .bt-step:last-child{padding-bottom:0}
+  .bt-dot{width:13px;height:13px;border-radius:50%;background:var(--rust);margin-top:4px;z-index:1}
+  .bt-step::before{content:"";position:absolute;left:6px;top:17px;bottom:-2px;width:2px;background:var(--line)}
+  .bt-step:last-child::before{display:none}
+  .bt-step .t{font-family:"Noto Serif TC",serif;font-weight:700;font-size:15.5px}
+  .bt-step .d{font-size:14px;color:var(--ink);margin-top:3px}
+  .bt-sub{font-size:12.5px;color:var(--ink-soft);margin-top:2px}
+  .bt-cd{display:inline-block;font-family:"Fraunces",serif;font-style:italic;font-size:13px;color:var(--ink-soft);margin-top:4px}
+  .bt-cd.due{color:var(--combo);font-weight:500}
+
+  /* ---------- Feeding log ---------- */
+  .fl-snake{border:1px solid var(--line);border-radius:14px;background:var(--paper-2);padding:16px;margin-bottom:14px}
+  .fl-head{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
+  .fl-id{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+  .fl-in{font:inherit;font-size:14px;padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:var(--paper);color:var(--ink)}
+  .fl-name{font-family:"Noto Serif TC",serif;font-weight:700;font-size:17px;min-width:130px}
+  .fl-form input[type=date],.fl-meta input[type=date]{width:auto;min-width:150px}
+  .fl-meta{display:flex;flex-wrap:wrap;gap:14px;margin-top:11px;font-size:12.5px;color:var(--ink-soft)}
+  .fl-meta label{display:flex;align-items:center;gap:6px}
+  .fl-meta .fl-in{max-width:180px}
+  .fl-stats{display:flex;flex-wrap:wrap;gap:8px 20px;margin-top:12px;font-size:13px;color:var(--ink-soft)}
+  .fl-stats b{color:var(--rust);font-weight:600;font-family:"Fraunces",serif;font-style:italic}
+  .fl-form{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:12px;padding-top:12px;border-top:1px dashed var(--line)}
+  .fl-form .fl-in{flex:1;min-width:120px}
+  .fl-form .fl-log-add{flex:0 0 auto}
+  .fl-log{margin-top:11px;display:grid;gap:7px}
+  .fl-entry{display:grid;grid-template-columns:auto auto 1fr auto;gap:10px;align-items:center;font-size:13px;
+            padding:8px 11px;border:1px solid var(--line);border-radius:10px;background:var(--paper)}
+  .fl-badge{font-size:11px;font-weight:700;padding:3px 9px;border-radius:20px;white-space:nowrap}
+  .fl-eaten{background:rgba(92,102,71,.18);color:#3f4a2c}
+  .fl-refused{background:rgba(164,80,46,.15);color:#7d3a20}
+  .fl-when{font-family:"Fraunces",serif;color:var(--ink-soft);white-space:nowrap}
+  .fl-what{color:var(--ink)}
+  .fl-wt{font-family:"Fraunces",serif;font-weight:600;color:var(--rec);white-space:nowrap}
+  .fl-form .j-weight{flex:0 0 auto;width:96px;min-width:0}
+  .fl-chart-wrap{margin-top:12px;padding-top:12px;border-top:1px dashed var(--line)}
+  .fl-chart-cap{font-size:12px;letter-spacing:.06em;color:var(--ink-soft);margin-bottom:4px}
+  .fl-chart{display:block;width:100%;max-width:560px;height:auto;font-family:"Noto Sans TC",sans-serif}
+  .fl-note{grid-column:1 / -1;font-size:12.5px;color:var(--ink-soft);border-top:1px dashed var(--line);padding-top:6px;margin-top:1px}
+  .fl-del-log{cursor:pointer;border:none;background:none;color:var(--ink-soft);font-size:15px;line-height:1;padding:2px 5px}
+  .fl-del-log:hover{color:var(--rust)}
+  .fl-del-snake{font-size:12px;padding:6px 12px}
+
+  /* ---------- Care guide ---------- */
+  .care{margin:24px 0 10px;background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:24px 22px;box-shadow:var(--shadow)}
+  .care .ce{font-family:"Fraunces",serif;font-style:italic;color:var(--rust);font-size:14px}
+  .care h2{font-family:"Noto Serif TC",serif;font-weight:900;font-size:24px}
+  .care .hint{font-size:13.5px;color:var(--ink-soft);margin-top:6px}
+  .specsheet{margin-top:18px;border:1px solid var(--line);border-radius:13px;overflow:hidden}
+  .srow{display:grid;grid-template-columns:118px 1fr;gap:14px;padding:11px 15px;font-size:14px;border-bottom:1px solid var(--line)}
+  .srow:last-child{border-bottom:0}
+  .srow:nth-child(odd){background:var(--paper-2)}
+  .srow .k{color:var(--rust);font-weight:500;font-size:12.5px;letter-spacing:.04em;padding-top:1px}
+  .srow .v{color:var(--ink)}
+  .care-cards{margin-top:18px;display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
+  .ccard{background:var(--paper-2);border:1px solid var(--line);border-radius:14px;padding:15px 16px}
+  .ccard h3{font-family:"Noto Serif TC",serif;font-weight:700;font-size:17px;margin-bottom:6px}
+  .ccard p{font-size:13.5px;color:var(--ink-soft);line-height:1.7}
+  .steps{margin:16px 0 4px;padding-left:20px;display:grid;gap:9px}
+  .steps li{font-size:14px;line-height:1.7;padding-left:4px}
+  .steps li b{color:var(--ink);font-weight:700}
+  .steps li::marker{color:var(--rust);font-family:"Fraunces",serif;font-weight:600}
+
+  footer{border-top:1px solid var(--line);margin-top:54px;padding:26px 0 50px;font-size:12.5px;color:var(--ink-soft)}
+  footer a{color:var(--rust)}
+  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto}}
+</style>
+</head>
+<body>
+
+<header><div class="wrap">
+  <div class="crest">
+    <svg viewBox="0 0 64 64" fill="none" aria-hidden="true">
+      <path d="M8 40c0-13 9-23 22-23 9 0 15 4 19 9 4-1 9 0 11 4 1 3-1 6-4 6-2 5-7 9-14 10" stroke="#2B2620" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M58 36c2.4 0 4 1.7 4 3.3s-2 2.7-4 2.4" stroke="#C07B33" stroke-width="2.4" stroke-linecap="round"/>
+      <circle cx="24" cy="32" r="2.6" fill="#2B2620"/>
+      <path d="M14 46c4 3 9 4 14 3" stroke="#A4502E" stroke-width="2.2" stroke-linecap="round"/>
+    </svg>
+    <div>
+      <div class="eyebrow">Field Guide to Morphs</div>
+      <h1>猪鼻蛇基因圖鑑</h1>
+      <div class="sub">Heterodon nasicus · 西部猪鼻蛇</div>
+    </div>
+  </div>
+  <p class="lede">收錄西部猪鼻蛇的基底基因、超級型與常見組合型。每筆條目標註遺傳方式、外觀特徵與飼育注意事項。點任一卡片查看完整說明，下方附遺傳配對計算機。</p>
+  <div class="stats">
+    <div class="stat"><div class="n" id="s-base">–</div><div class="l">基底基因</div></div>
+    <div class="stat"><div class="n" id="s-combo">–</div><div class="l">組合型</div></div>
+    <div class="stat"><div class="n" id="s-rec">–</div><div class="l">隱性基因</div></div>
+    <div class="stat"><div class="n" id="s-total">–</div><div class="l">總條目</div></div>
+  </div>
+</div></header>
+
+<div class="wrap">
+  <nav class="tabs" role="tablist" aria-label="主分頁">
+    <button class="tab" data-view="care" data-on="1" role="tab">飼養方式</button>
+    <button class="tab" data-view="health" role="tab">健康疾病</button>
+    <button class="tab" data-view="morphs" role="tab">基因圖鑑</button>
+    <button class="tab" data-view="calc" role="tab">配對計算機</button>
+    <button class="tab" data-view="breed" role="tab">繁殖配對</button>
+    <button class="tab" data-view="hatch" role="tab">育幼開食</button>
+    <button class="tab" data-view="feedlog" role="tab">開食紀錄</button>
+  </nav>
+
+  <div id="view-morphs" hidden>
+  <div class="controls">
+    <div class="search">
+      <svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="m20 20-3.5-3.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      <input id="q" type="search" placeholder="搜尋基因名稱（中／英）…" autocomplete="off">
+    </div>
+    <div class="chips" id="chips">
+      <button class="chip" data-on="1" data-f="all">全部</button>
+      <button class="chip" data-f="base">基底基因</button>
+      <button class="chip" data-f="combo">組合型</button>
+      <button class="chip" data-f="recessive"><span class="dot rec"></span>隱性</button>
+      <button class="chip" data-f="incdom"><span class="dot inc"></span>不完全顯性</button>
+      <button class="chip" data-f="dominant"><span class="dot dom"></span>顯性</button>
+      <button class="chip" data-f="other"><span class="dot other"></span>其他／非遺傳</button>
+    </div>
+  </div>
+
+  <div class="count" id="count"></div>
+
+  <div class="grid" id="grid"></div>
+  </div><!-- /view-morphs -->
+
+  <!-- Calculator -->
+  <div id="view-calc" hidden>
+  <section class="care">
+    <div class="ce">How to use</div>
+    <h2>使用說明</h2>
+    <p class="hint">本工具預測「一對親代」交配後，後代各表現型出現的機率，可同時放入多個基因一起算。</p>
+    <ol class="steps">
+      <li><b>加入基因</b>：每一列選一個基因；按「＋ 加入基因」可再加一列，按該列的 ✕ 可移除。</li>
+      <li><b>設定雙親</b>：每列分別設定親代 A、B 的狀態。隱性基因可選「正常／帶因 het／顯性表現 visual」；不完全顯性（蟒紋、北極）可選「正常／單份表現／超級型」。</li>
+      <li><b>看組合結果</b>：下方會自動把各基因相乘，列出後代的組合表現型與機率（分數），已命名的組合會標出，例如「白化 ＋ 無黃 ＝雪 Snow」。下方另有 het 帶因提示。</li>
+    </ol>
+    <div class="care-cards">
+      <article class="ccard"><h3>怎麼看懂結果</h3><p>隱性基因要同時拿到兩份才會「visual（顯性表現）」；外觀正常的後代可能帶因 het——這在「帶因 het 提示」會標出比例（如 100% 或 67%）。帶因者外觀與正常無異，需靠紀錄或試交確認。不完全顯性則單份、超級型外觀不同，各自列為一種結果。</p></article>
+      <article class="ccard"><h3>機率怎麼算的</h3><p>各基因獨立分配，工具把每個基因的機率相乘得到組合機率（例：白化 1/4 × 無黃 1/4 ＝ 雪 1/16）。結果以分數呈現、依機率高到低排序；組合過多時只顯示前幾高，其餘合併為一列。實際產出條數會有運氣波動，比例僅為期望值。</p></article>
+    </div>
+  </section>
+
+  <section class="calc">
+    <div class="ce">Pairing Calculator</div>
+    <h2>遺傳配對計算機</h2>
+    <p class="hint">可同時加入多個基因；工具會各自計算並自動相乘，列出後代的組合表現型與機率（含已命名的組合，如「雪 1/16」）。</p>
+    <div id="g-rows"></div>
+    <button id="g-add" class="ptbtn" type="button">＋ 加入基因</button>
+    <div class="res" id="g-res">
+      <h4>組合結果 OFFSPRING</h4>
+      <div id="g-bars"></div>
+      <div id="g-hets" class="hets"></div>
+    </div>
+  </section>
+  </div><!-- /view-calc -->
+
+  <!-- Care guide -->
+  <div id="view-care">
+  <section class="care">
+    <div class="ce">Care &amp; Husbandry</div>
+    <h2>飼養方式</h2>
+    <p class="hint">西部猪鼻蛇為小型、地棲鑽掘性蛇類，喜乾燥、好鑽土，性情溫馴。以下為一般飼養參考。</p>
+
+    <div class="specsheet">
+      <div class="srow"><span class="k">飼養空間</span><span class="v">公蛇至少約 76×33×33 cm（約 20 加侖長缸）；母蛇至少約 90×45×40 cm（約 40 加侖）。重底面積非高度，越大越好。</span></div>
+      <div class="srow"><span class="k">熱點（曬點）</span><span class="v">32–40°C（約 90–105°F），以恆溫器控制，避免使用加熱石。</span></div>
+      <div class="srow"><span class="k">暖區 / 冷區</span><span class="v">暖區約 29–31°C；冷區約 21–24°C，形成溫度梯度供自行調節。</span></div>
+      <div class="srow"><span class="k">夜間溫度</span><span class="v">約 21–24°C；低於約 16°C 才需額外補溫。</span></div>
+      <div class="srow"><span class="k">濕度</span><span class="v">30–50%（探針置於中央量測）。冷側、夜間略高屬正常。</span></div>
+      <div class="srow"><span class="k">光照 / UVB</span><span class="v">日行性，每日約 10–12 小時光照。UVB 非必需，但建議低量 2–5% 以促進自然行為。</span></div>
+      <div class="srow"><span class="k">體型 / 壽命</span><span class="v">母蛇約 90 cm、公蛇約 60 cm；壽命約 10–15 年，部分可達 20 年。</span></div>
+    </div>
+
+    <div class="care-cards">
+      <article class="ccard"><h3>底材</h3><p>可鑽掘的鬆軟底材是重點。可用白楊木屑、紙棉（如 CareFresh）、或爬蟲用土／黏土混合，鋪厚一點讓牠鑽。避免雪松、松木（揮發油有毒），避免細散沙（誤食易腸阻塞）。</p></article>
+      <article class="ccard"><h3>佈置</h3><p>暖、冷兩側各放至少一個躲避，多預留鑽掘空間；可加落葉層、軟木、石塊、植物增加豐富度。飼養箱務必上蓋緊閉——牠們很會鑽、擅長脫逃。</p></article>
+      <article class="ccard"><h3>餵食</h3><p>餵解凍鼠（F/T），餌料寬度約等於蛇最粗處。幼蛇約每 5 天一次，亞成至成蛇約每 7–10 天一次。野外主食蟾蜍等兩棲類，人工環境吃鼠，偶有挑食需以氣味誘食。餵前回溫；建議在另一容器餵食以免誤食底材。</p></article>
+      <article class="ccard"><h3>飲水</h3><p>放一個夠大、可泡水的水盆並常保乾淨。濕度偏低或蛻皮期，泡水也有助順利蛻皮。</p></article>
+      <article class="ccard"><h3>互動與習性</h3><p>性情溫馴。受驚時會嘶氣、把頭頸壓扁、甚至翻肚裝死（伴隨排泄物），都是無害的虛張聲勢，常隨適應減少。屬後溝牙、唾液輕微毒性，對人多半無礙（少數人可能輕微刺痛、腫脹）。確定穩定進食後再開始把玩，蛻皮期與餵後 48 小時內避免。</p></article>
+      <article class="ccard"><h3>健康注意</h3><p>太冷或太濕易呼吸道感染；過量餵食易肥胖；細沙底材有腸阻塞風險；餵後太早把玩會吐料。新進個體先隔離檢疫。出現食慾不振、喘鳴、口腔分泌物等異常，儘速就診爬蟲獸醫。</p></article>
+    </div>
+    <p class="hint" style="margin-top:14px">數值為一般建議區間，實際依個體、品系與所在氣候微調。本段為飼養參考，非獸醫建議。</p>
+  </section>
+  </div><!-- /view-care -->
+
+  <!-- Health & disease -->
+  <div id="view-health" hidden>
+  <section class="care">
+    <div class="ce">Health &amp; Safety</div>
+    <h2>健康與疾病排查</h2>
+    <p class="hint">多數健康問題的根源都是飼養環境。發現異常先檢查溫度、濕度、清潔與緊迫，並儘早諮詢爬蟲獸醫。以下為一般參考，<b>不能取代獸醫診斷</b>。</p>
+
+    <div class="specsheet">
+      <div class="srow"><span class="k">張口呼吸／黏液</span><span class="v">鼻口有黏液、呼吸有聲、嗜睡 → 疑似呼吸道感染，儘速就醫。</span></div>
+      <div class="srow"><span class="k">蛻皮後眼睛霧白</span><span class="v">眼罩沒蛻掉（卡眼罩）→ 切勿自行剝除，提高濕度、設濕窩，未改善就就醫。</span></div>
+      <div class="srow"><span class="k">體表黑點會移動</span><span class="v">眼周、泄殖孔、鱗縫有會動的小黑點 → 蛇蟎，立即隔離、消毒，用爬蟲安全藥。</span></div>
+      <div class="srow"><span class="k">持續拒食＋掉重</span><span class="v">排除蛻皮／緊迫後仍拒食且體重下滑 → 就醫排查（可參考「開食紀錄」追體重）。</span></div>
+      <div class="srow"><span class="k">臉腫／嘴角結痂</span><span class="v">疑似口腔炎（嘴角感染）→ 就醫。</span></div>
+      <div class="srow"><span class="k">泄殖孔組織脫出</span><span class="v">脫肛 → 保持濕潤、避免乾掉，視為急診儘速就醫。</span></div>
+      <div class="srow"><span class="k">反覆嘔吐／反芻</span><span class="v">停餵讓腸胃休息、檢查溫度與餌料大小，反覆發生就就醫。</span></div>
+      <div class="srow"><span class="k">抽搐／神經異常</span><span class="v">可能中毒（化學品、不當除蟎藥）→ 立即就醫，移除可疑來源。</span></div>
+    </div>
+
+    <div class="care-cards">
+      <article class="ccard"><h3>呼吸道感染（RI）</h3><p>症狀：喘鳴、張口呼吸、鼻口黏液或牽絲狀唾液、嗜睡。猪鼻蛇相對較易發生，多因溫度不穩、濕度過高或緊迫。預防靠正確的溫度梯度、良好通風、保持清潔。早期就醫以抗生素治療效果好，別拖。</p></article>
+      <article class="ccard"><h3>蛇蟎（外寄生蟲）</h3><p>表現為眼周、鼻、泄殖孔、鱗縫間會移動的小黑點，蛇常泡水或磨蹭缸壁止癢。處理：立即隔離、徹底清缸消毒、改用廚房紙當墊材方便觀察，並用<b>爬蟲專用</b>除蟎方式。猪鼻蛇對毒物極敏感，切勿亂用殺蟲劑，不確定就請獸醫指示。</p></article>
+      <article class="ccard"><h3>卡眼罩與蛻皮不順</h3><p>濕度不足易使蛻皮不完整、眼罩（spectacle）殘留。成蛇約每 4–8 週蛻一次。<b>切勿用手硬剝眼罩</b>，可能傷到眼睛；改善方式是提高濕度、提供濕窩，讓牠下次自然蛻掉；殘留多次或卡住就就醫。</p></article>
+      <article class="ccard"><h3>口腔炎與誤食阻塞</h3><p>猪鼻蛇牙齒與牙齦脆弱，易因摩擦受傷而感染（口腔炎）：臉腫、嘴緣結痂應就醫。牠們又是「吃相邋遢」的物種，易連同墊材吞下造成腸阻塞（impaction），嚴重需手術——建議在<b>另一個乾淨容器</b>裡餵食以避免誤食墊材。</p></article>
+      <article class="ccard"><h3>內寄生蟲與嘔吐</h3><p>內寄生蟲（線蟲、球蟲、原蟲等）常見於吃過兩棲類的個體，導致食慾差、糞便惡臭、消瘦、反芻；帶新鮮糞便給獸醫做檢查，確診後用驅蟲藥。嘔吐也可能因餌料過大、剛餵就把玩、溫度太低——先停餵休息、修正飼養，反覆發生再就醫。</p></article>
+      <article class="ccard"><h3>鱗腐・燙傷・脫肛</h3><p>鱗腐：墊材長期潮濕骯髒引發細菌／黴菌感染，保持乾燥清潔並就醫處理。燙傷：加熱設備未接溫控可能燙傷腹鱗，務必使用恆溫器。脫肛：泄殖孔有組織外露屬急症，保持濕潤、勿讓組織乾燥壞死，立即就醫。</p></article>
+      <article class="ccard"><h3>咬傷與微毒：安全須知</h3><p>猪鼻蛇是「後溝牙微毒」，毒液（Duvernoy 腺分泌）專門對付蟾蜍兩棲類，對人毒性很低、不具醫療意義（無組織壞死、無致命案例）。牠們個性溫馴、多以脹頸、嘶氣、裝死虛張聲勢，很少咬人；快速啄一下通常不會注入毒液，需「咬住咀嚼」才會。多數人僅輕微刺痛，<b>但少數人會有過敏式反應</b>：局部腫脹、發紅、發癢、起水泡或瘀斑，可能數天到數週才消。急救：冷靜讓牠鬆口（勿硬扯）、清水肥皂沖洗、取下附近戒指飾品（防腫脹），冰敷抬高觀察；若大範圍腫脹、擴散、呼吸困難或本身會過敏，就醫。餵食時用蛇鉤或戴手套可避免被咬。</p></article>
+      <article class="ccard"><h3>預防・檢疫・就醫</h3><p>新個體至少隔離檢疫 30–90 天再與其他蛇接觸。為每條蛇建立基準資料：健康體重、正常食慾、蛻皮週期，定期記錄體重與餵食以便及早發現異常（正是「開食紀錄」分頁的用途）。在出事之前就先找好一位可靠的爬蟲獸醫。環境用無毒清潔劑、只餵來源乾淨的餌料。</p></article>
+    </div>
+    <p class="hint" style="margin-top:14px">出現紅旗警訊（張口呼吸、脫肛、持續嘔吐或掉重、神經異常）別自行處理，儘速就診爬蟲專科獸醫。</p>
+  </section>
+  </div><!-- /view-health -->
+
+  <!-- Breeding & pairing -->
+  <div id="view-breed" hidden>
+  <section class="care">
+    <div class="ce">Breeding &amp; Pairing</div>
+    <h2>繁殖配對</h2>
+    <p class="hint">西部猪鼻蛇是相對好上手的繁殖物種，但繁殖對母蛇是一場高耗能、有風險的過程。請務必在親代健康、體態達標、穩定進食的前提下進行；本段為流程參考，非獸醫或繁殖醫療建議。</p>
+
+    <div class="specsheet">
+      <div class="srow"><span class="k">公蛇性成熟</span><span class="v">約 1 歲、體重約 70 g 以上即可嘗試（體型偏小的公蛇也常能成功繁殖）。</span></div>
+      <div class="srow"><span class="k">母蛇性成熟</span><span class="v">建議滿 2–3 歲、體重至少約 250 g 且體態良好再上。年紀／體重不足是難產的最大風險來源。</span></div>
+      <div class="srow"><span class="k">繁殖季節</span><span class="v">北半球多在冬季降溫（約 11 月起），春季回溫後（約 2 月）交配。</span></div>
+      <div class="srow"><span class="k">降溫前禁食</span><span class="v">降溫前停餵約 2 週，確保腸道排空（低溫下食物滯留會腐敗致命）。</span></div>
+      <div class="srow"><span class="k">降溫（brumation）</span><span class="v">約 10–15°C（50–60°F），維持約 6–8 週至 2–3 個月；期間保持飲水、環境偏暗、不餵食。</span></div>
+      <div class="srow"><span class="k">光照縮短</span><span class="v">由平時約 14–16 小時降到約 8 小時，作為季節訊號。</span></div>
+      <div class="srow"><span class="k">回溫</span><span class="v">約 1 週內漸進升回正常溫度與光照；之後加強餵食，母蛇可一週兩餐補體力。</span></div>
+      <div class="srow"><span class="k">交配時機</span><span class="v">母蛇排卵蛻皮（pre-lay shed）前後、身體中後段明顯膨大時引入公蛇，輪流相處 2–3 天，至少確認鎖交 2 次。</span></div>
+      <div class="srow"><span class="k">產卵</span><span class="v">交配後約 28–45 天產卵，產前會先蛻一次皮。每窩約 4–20＋顆，平均約 10 顆上下（依母蛇體型而異）。</span></div>
+      <div class="srow"><span class="k">孵化溫度</span><span class="v">約 26–29°C（78–84°F），常用約 28°C／82°F；維持穩定、勿大幅波動。</span></div>
+      <div class="srow"><span class="k">孵化天數</span><span class="v">約 50–64 天。蛋勿翻轉（氣室在上方）。</span></div>
+      <div class="srow"><span class="k">幼蛇</span><span class="v">出殼後約 7–10 天首次蛻皮，蛻後再開食；分開單獨飼養，幼蛇有時需以氣味誘食。</span></div>
+    </div>
+
+    <ol class="steps">
+      <li><b>確認可繁殖</b>：性別正確、年齡體重達標、無傷病、穩定進食。母蛇體態（脊與肋的覆肉）比單純體重更重要，太瘦勿上。</li>
+      <li><b>規劃基因配對</b>：先決定要做哪個組合，再回頭挑親代——隱性基因要雙方都「visual 或帶因 het」才可能出表現型。可到「配對計算機」分頁先試算各表現型與帶因比例。</li>
+      <li><b>降溫前清腸</b>：停餵約 2 週、維持正常溫度讓食物消化排空，再開始降溫。</li>
+      <li><b>降溫蟄伏</b>：漸進降到約 10–15°C，並縮短光照；維持飲水、環境偏暗，持續約 6–8 週以上。</li>
+      <li><b>回溫與催肥</b>：一週內漸進升溫升光，恢復餵食並加強母蛇營養，等待排卵蛻皮。</li>
+      <li><b>引入交配</b>：見母蛇中後段膨大／排卵徵兆時放入公蛇，輪流相處數日，確認鎖交。</li>
+      <li><b>準備產卵箱</b>：放一個裝濕水苔／濕蛭石的產卵盒，讓母蛇有合適隱密處下蛋；留意產前蛻皮為產卵前兆。</li>
+      <li><b>取蛋孵化</b>：蛋下方標記方向、勿翻轉，移入蛭石／珍珠石孵化盒，控溫控濕靜置至出殼。</li>
+      <li><b>育幼</b>：幼蛇蛻皮後分開單獨照顧並開食，記錄每條的基因／帶因（het）資訊備查。</li>
+    </ol>
+
+    <div class="care-cards">
+      <article class="ccard"><h3>基因配對怎麼搭</h3><p>隱性（白化、無黃等）需湊滿兩份才表現：visual×visual＝全 visual；visual×het＝半數 visual；het×het＝約 1/4 visual、半數外觀正常但帶因。不完全顯性（蟒紋 Conda、北極 Arctic）單份×單份＝約 1/4 超級型、1/2 單份、1/4 正常。多基因可在「配對計算機」一次相乘試算。</p></article>
+      <article class="ccard"><h3>帶因（het）追蹤</h3><p>外觀正常的後代可能帶隱性因，肉眼無法分辨，只能靠血統紀錄或日後試交確認。務必逐條登錄親代與預期 het 比例（如「66% het 白化」），這是日後做組合與誠實標示販售的依據。</p></article>
+      <article class="ccard"><h3>產卵與孵化</h3><p>提供濕潤可鑽的產卵盒誘導集中下蛋。取蛋時保持原方向、勿翻轉（氣室在上，翻轉會悶死胚胎）。以蛭石或珍珠石半埋，維持高濕與穩定約 28°C，避免溫度大起大落以保孵化率。</p></article>
+      <article class="ccard"><h3>風險與難產</h3><p>難產（卵滯留 dystocia）是母蛇最嚴重的風險，常見於過小、過瘦或缺乏合適產卵處的母蛇。若母蛇遲遲不下蛋、明顯虛弱或用力無果，應儘速就診爬蟲獸醫。繁殖前確保體態與鈣質充足，並備好可就診的獸醫資源。</p></article>
+      <article class="ccard"><h3>母蛇的休養</h3><p>一窩蛋對母蛇消耗極大。勿連年高強度繁殖，產後讓她充分回溫、回補體重再考慮下一季，必要時隔年休養。母蛇的健康永遠優先於產量。</p></article>
+      <article class="ccard"><h3>負責任繁殖</h3><p>只用健康、來源清楚的個體；做新組合（尤其同型 super）前先查證該血系是否有已知健康疑慮。考量幼蛇去向與市場，避免盲目量產。販售時誠實標示基因與 het 比例。繁殖前也請確認當地飼養／買賣相關規範。</p></article>
+    </div>
+    <p class="hint" style="margin-top:14px">以上數值為一般建議區間，實際依個體、品系與氣候微調。首次繁殖建議先請教有經驗的繁殖者，並備妥爬蟲獸醫聯絡方式。</p>
+  </section>
+
+  <section class="calc" id="bt-tool">
+    <div class="ce">Timeline Calculator</div>
+    <h2>繁殖時程計算機</h2>
+    <p class="hint">輸入交配日，自動推算「預計產卵」與「預計出殼」的時間範圍與倒數。實際產卵後，回填「實際產卵日」可讓出殼估算更準。</p>
+    <div class="crow">
+      <div class="field" style="min-width:160px"><label>交配日</label><input type="date" id="bt-mate"></div>
+      <div class="field" style="min-width:160px"><label>實際產卵日（可留空）</label><input type="date" id="bt-lay"></div>
+      <div class="field" style="min-width:200px"><label>孵化溫度</label>
+        <select id="bt-temp">
+          <option value="warm">偏高 ~29°C（約 50–55 天）</option>
+          <option value="mid" selected>常用 ~28°C（約 55–60 天）</option>
+          <option value="cool">偏低 ~26°C（約 60–64 天）</option>
+        </select>
+      </div>
+    </div>
+    <button id="bt-clear" class="ptbtn" type="button" style="margin-top:12px">清除紀錄</button>
+    <div class="res" id="bt-res">
+      <h4>時程預測 TIMELINE</h4>
+      <div class="bt-line" id="bt-timeline"></div>
+      <div class="bt-sub" id="bt-note" style="margin-top:10px"></div>
+    </div>
+  </section>
+  </div><!-- /view-breed -->
+
+  <!-- Hatchling care -->
+  <div id="view-hatch" hidden>
+  <section class="care">
+    <div class="ce">Hatchling Care</div>
+    <h2>育幼・開食・分辨公母</h2>
+    <p class="hint">小蛇出殼後最常見的挑戰就是「開食」。西部猪鼻蛇幼蛇出了名地挑食，多數會吃、但有些需要耐心引導。以下為一般作法，非獸醫建議。</p>
+
+    <div class="specsheet">
+      <div class="srow"><span class="k">開食時機</span><span class="v">出殼後約 7–14 天、完成「第一次蛻皮」後才開始餵；蛻皮前靠卵黃存活，先別急。</span></div>
+      <div class="srow"><span class="k">第一餐</span><span class="v">解凍乳鼠（pinky），回溫到接近體溫；尺寸約等於小蛇最粗處，勿過大。</span></div>
+      <div class="srow"><span class="k">餵食頻率</span><span class="v">幼蛇約每 5–7 天一次；穩定進食、成長後再逐步拉長間隔。</span></div>
+      <div class="srow"><span class="k">飼養空間</span><span class="v">小空間（如 6 夸脫整理箱）較有安全感、也較好控溫控濕，有助開食。</span></div>
+      <div class="srow"><span class="k">把玩</span><span class="v">連續吃滿約 2 餐、穩定前盡量不把玩，減少緊迫。</span></div>
+      <div class="srow"><span class="k">正常反應</span><span class="v">首次面對食物可能嘶氣、逃開、翻肚裝死，皆為無害的虛張聲勢，冷靜後再試即可。</span></div>
+    </div>
+
+    <div class="care-cards">
+      <article class="ccard"><h3>第一餐怎麼餵</h3><p>用鑷子夾住回溫的乳鼠，輕輕把鼠頭觸碰小蛇的下巴或鼻端。許多幼蛇會先舔到鼠身上的水分——這通常是好兆頭，常接著就吞。建議在夜間或關燈後餵，環境安靜昏暗；或把蛇與餌料放進有蓋小盒整晚靜置。需要一點練習，耐心最重要。</p></article>
+      <article class="ccard"><h3>誘食（scenting）</h3><p>素鼠不吃時，可把乳鼠沾上「氣味」誘發攝食：鮪魚／鮭魚汁（1:1 加水）、（人工繁殖、<b>非</b>野外捕捉的）蛙／蟾、蜥蜴、蛋液等，模擬其野外兩棲食性。野生蛙蟾有寄生蟲與農藥風險，切勿使用。braining（劃開乳鼠頭部、露出腦組織加強氣味）對極頑固個體有效。提醒：蛙蟾味之後很難轉回無味鼠，建議先試素鼠，把濃味當最後手段。</p></article>
+      <article class="ccard"><h3>拒食先別慌</h3><p>別一拒食就跳到誘食。先依序排查：熱點溫度（約 32°C）、濕度、是否正在蛻皮、是否剛搬家或被過度打擾、近期是否已餵。只要活力好、體重沒掉，偶爾跳一兩餐是正常的。每次嘗試間隔約 7 天以建立飢餓感、減少緊迫（多放躲避與雜物、調暗光線、少把玩）。餌料務必回溫、夜間餵、可整晚留盒。</p></article>
+      <article class="ccard"><h3>分辨公母（看外觀）</h3><p>最安全的方式是看尾部：公蛇尾較長、較細，尾基較粗且向後逐漸收窄（容納半陰莖）；母蛇尾較短鈍、泄殖孔之後急速收窄，像有「腰」。尾下鱗（腹面）鱗數：公蛇多 >40、母蛇 &lt;37，介於中間較難判。小蛇比成蛇難判讀，外觀法非百分之百準確，花色／品系與性別無關。</p></article>
+      <article class="ccard"><h3>進階：探針／翻肛</h3><p>探針法最可靠：公蛇探入約 6–10 片尾下鱗深、母蛇僅約 1–3 片。必須使用爬蟲專用潤滑、由有經驗者或獸醫操作；手法不當會傷到蛇。翻肛（擠出半陰莖）可用於幼蛇但風險高，同樣應交給有經驗者。沒把握時，請繁殖者或爬蟲獸醫協助確認，別自行硬來。</p></article>
+      <article class="ccard"><h3>何時該找獸醫</h3><p>長期拒食且明顯掉體重、脫水、精神不振、嘔吐、口鼻有分泌物、蛻皮不順或卡住眼罩，應儘速就診爬蟲獸醫；灌餵／助食屬最後手段，由有經驗者或獸醫執行。新個體先隔離檢疫。另注意：成年公蛇在繁殖季（約 6–8 月）常自然停食，只要健康、無掉重就不必強迫。</p></article>
+    </div>
+    <p class="hint" style="margin-top:14px">幼蛇個體差異大，有的第一餐就吞、有的得試上數週。保持耐心、穩定環境、減少打擾，是開食成功的關鍵。</p>
+  </section>
+  </div><!-- /view-hatch -->
+
+  <!-- Feeding log -->
+  <div id="view-feedlog" hidden>
+  <section class="calc" id="fl-tool">
+    <div class="ce">Feeding Log</div>
+    <h2>開食紀錄表</h2>
+    <p class="hint">記錄每條小蛇的每次餵食嘗試（日期、餌料、誘食方式、結果），自動算出「距上次進食天數」與「開食成功率」。資料保存在本機瀏覽器。</p>
+    <div id="fl-list"></div>
+    <p class="hint" id="fl-empty" style="margin:2px 0 12px">還沒有紀錄。按下方「＋ 新增小蛇」開始。</p>
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <button id="fl-add" class="ptbtn primary" type="button">＋ 新增小蛇</button>
+      <button id="fl-clear" class="ptbtn" type="button">清除全部</button>
+    </div>
+  </section>
+
+  <section class="calc" id="bk-tool">
+    <div class="ce">Backup</div>
+    <h2>資料備份／還原</h2>
+    <p class="hint">本工具的所有紀錄（開食紀錄、繁殖時程）都只存在這個瀏覽器。建議定期「匯出備份」存成檔案；換裝置、清快取或換網址後，可用「匯入」還原。</p>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+      <button id="bk-export" class="ptbtn primary" type="button">⬇ 匯出備份（JSON）</button>
+      <button id="bk-import" class="ptbtn" type="button">⬆ 匯入還原</button>
+      <input id="bk-file" type="file" accept="application/json,.json" hidden>
+    </div>
+    <p class="hint" id="bk-msg" style="margin-top:10px" hidden></p>
+  </section>
+  </div><!-- /view-feedlog -->
+
+  <footer>
+    <p>資料整理自育種社群公開型錄（GM Reptiles、ReptiDex、Reptifit、Hognose Wiki 等）。坊間慣稱的「co-dominant 共顯性」在遺傳學上多屬「不完全顯性 incomplete dominant」，本圖鑑採用後者。組合型外觀會因血系而異，配對前建議再次查證親代基因。</p>
+    <p style="margin-top:8px">每筆基因的圖片皆為依其顏色與斑紋自動生成的<b>原創卡通插畫</b>（程式繪製、內嵌於本檔、無版權疑慮）。若日後想把某幾筆改用照片，可在同層 <code style="background:var(--paper);padding:1px 5px;border-radius:5px">images/</code> 資料夾放入以編號命名的圖（如 <code style="background:var(--paper);padding:1px 5px;border-radius:5px">images/2.jpg</code>），即會覆蓋該筆插畫；請使用自有或具授權的圖片。</p>
+    <p style="margin-top:8px">本圖鑑為教育參考用途，非繁殖醫療與法律建議。</p>
+  </footer>
+</div>
+
+<!-- Modal -->
+<div class="scrim" id="scrim">
+  <div class="sheet" id="sheet"></div>
+</div>
+
+<script id="app">
+/* ---------- Morph data ---------- */
+const M = [
+  // ---- BASE GENES ----
+  {id:1,zh:"野生型",en:"Normal / Wild Type",cat:"base",inh:"other",
+   sw:"linear-gradient(135deg,#8a6b3e,#5e4a2c 55%,#3f3320)",
+   aka:["Classic","Wildtype","原始型"],
+   short:"猪鼻蛇的原始野生配色，個體差異大。",
+   desc:"野生型是未經選育的原始外觀，背部有深色鞍狀斑塊，腹面為黑白棋盤格。體色變異極大，可見棕、紅、綠、黃等色調，多數個體外觀近似響尾蛇（貝氏擬態）。",
+   look:"棕褐底色＋深色鞍斑，黑白格腹面", eyes:"深色"},
+
+  {id:2,zh:"白化",en:"Albino",cat:"base",inh:"recessive",
+   sw:"linear-gradient(135deg,#ffd97a,#ff9e4a 55%,#ffb56b)",
+   aka:["Amelanistic","T- Albino","無黑色素"],
+   short:"缺乏全部黑色素，亮黃橘底色配紅眼，是市場最常見的基因。",
+   desc:"白化為去除所有黑／棕色素（黑色素）的隱性突變，呈鮮明的黃橘底色，鞍斑為白、米或淡黃，全身無深色素，虹膜因缺黑色素而呈粉至紅色。是猪鼻蛇圈最早建立、也最普遍的基因，並衍生極紅、紅、橘、黃等多種色系。與無黃組合成『雪 Snow』，與伊凡斯低黑組合成『珊瑚 Coral』。",
+   look:"黃橘底＋白／米鞍斑", eyes:"粉紅至紅"},
+
+  {id:3,zh:"無黃",en:"Axanthic",cat:"base",inh:"recessive",
+   sw:"linear-gradient(135deg,#b9bfc4,#7e868d 55%,#4b5258)",
+   aka:["無黃色素","AXAN"],
+   short:"去除黃／紅色素，呈銀灰至藍灰，深色斑紋保留。",
+   desc:"無黃減少或去除黃色素細胞（黃、紅色素），原本溫暖的橘棕被冷調灰色取代，呈銀灰至藍灰。黑色素完整保留，因此深色鞍斑仍在，與銀灰底形成強烈對比，眼睛維持深色。與薰衣草為獨立基因（互補測交產生外觀正常的雙隱性帶因）。與白化組合成『雪 Snow』。",
+   look:"銀灰／藍灰底＋深灰黑斑", eyes:"深色"},
+
+  {id:4,zh:"焦糖",en:"Caramel",cat:"base",inh:"recessive",
+   sw:"linear-gradient(135deg,#d9a866,#b07b3e 55%,#8a5e2c)",
+   aka:["Caramel Albino","T+ Albino","焦糖白化"],
+   short:"色調偏暖金棕／焦糖，腹面偏白。",
+   desc:"焦糖將整體色素轉向溫暖的金棕／焦糖調，底色為暖金棕，鞍斑呈棕色，對比的深色素減少。屬 T+ 型（保留部分黑色素，呈暖棕而非深黑）。與白化、無黃、伊凡斯低黑為不同基因座。常用於組合，如檸檬幽靈（焦糖＋低黑）與各式蟒紋組合。",
+   look:"暖金棕／焦糖底＋棕斑，白腹", eyes:"深至紅褐"},
+
+  {id:5,zh:"伊凡斯低黑",en:"Evans Hypo",cat:"base",inh:"recessive",
+   sw:"linear-gradient(135deg,#e8b56a,#cf8a4a 55%,#a9663a)",
+   aka:["Dutch Hypo","Hypo","荷蘭低黑"],
+   short:"減少黑色素，整體更明亮、對比更高。",
+   desc:"降低黑色素生成，使整體變亮、變鮮，深色素減弱，呈現更乾淨高對比的外觀，橘黃更鮮明、鞍斑邊緣較淡。與白化不同，它只是『減少』而非『去除』黑色素，因此眼睛仍為深色。以育種者 Randy Evans 命名，社群互補測交確認與其他低黑血系為獨立基因座。與白化組合成『珊瑚 Coral』。",
+   look:"明亮高對比，橘黃鮮明", eyes:"深至紅寶石色"},
+
+  {id:6,zh:"薰衣草",en:"Lavender",cat:"base",inh:"recessive",
+   sw:"linear-gradient(135deg,#c5b6d6,#9d8bb8 55%,#736089)",
+   aka:["T+ Albino","薰衣草色"],
+   short:"柔和灰紫底色，眼、舌、腹偏深紫。",
+   desc:"產生獨特的灰薰衣草色，底色為柔灰並帶薰衣草、淡紫的冷色調，原本的暖橘被削弱並偏向冷紫灰，鞍斑呈較深的紫灰至棕紫。屬 T+ 型白化。與無黃為不同基因座（薰衣草偏暖紫、無黃偏冷銀），互補測交可確認。紫色在照片中常顯灰，不易拍出。",
+   look:"灰薰衣草底＋紫灰斑", eyes:"深紫"},
+
+  {id:7,zh:"粉彩",en:"Pink Pastel",cat:"base",inh:"recessive",
+   sw:"linear-gradient(135deg,#f4c9d0,#e89fb0 55%,#d97f97)",
+   aka:["Pink Pastel Albino","T+ Albino"],
+   short:"淡粉色 T+ 白化，已知有神經與繁殖問題。",
+   desc:"屬於另一型白化（T+），表現為淡粉色。幼體偏紅，隨成長轉為更粉的色調，與一般白化（T-）為不同基因。已知此血系常見神經與繁殖力問題，是否與基因本身連鎖、或為近親繁殖所致仍待釐清。與蟒紋組合成『粉紅豹 Pink Panther』。",
+   look:"淡粉至粉紅", eyes:"紅",
+   warn:"此血系常見神經與繁殖力問題，購買與繁殖前請審慎評估親代健康狀況。"},
+
+  {id:8,zh:"黑貂",en:"Sable",cat:"base",inh:"recessive",
+   sw:"linear-gradient(135deg,#5a4a3a,#3d3026 55%,#241c15)",
+   aka:["黑化增強"],
+   short:"增加黑色素，呈深棕，常用於增豔淺色基因。",
+   desc:"黑貂會增加黑色素及其他色素細胞的生成，使個體比正常更暗，呈深棕色。部分個體腹鱗可見半透明鱗。正因深色，常被混入較淺的基因（如白化）以提升其亮度與對比，是組合育種的好搭檔。為隱性遺傳。與太妃糖腹組合成『邁泰 Mai Tai』。",
+   look:"深棕／近黑，對比強", eyes:"深色"},
+
+  {id:9,zh:"太妃糖腹",en:"Toffee Belly",cat:"base",inh:"recessive",
+   sw:"linear-gradient(135deg,#e0b878,#c9933f 55%,#9c6f2c)",
+   aka:["Toffeebelly","Toffee"],
+   short:"腹面變為金琥珀色，取代原本黑白格。",
+   desc:"最具辨識度的特徵是腹面：原本的黑白棋盤格被金黃／琥珀色取代。背部斑紋也可能略為變淺或對比改變。為獨立隱性基因座。與蟒紋組合成『太妃糖蟒紋 Toffeeconda』，與白化組合成『太妃糖光 Toffeeglow』。",
+   look:"金琥珀色腹面為主要特徵", eyes:"深色"},
+
+  {id:10,zh:"肉桂",en:"Cinnamon",cat:"base",inh:"recessive",
+   sw:"linear-gradient(135deg,#b06a3e,#8a4d2a 55%,#5f331c)",
+   aka:["Cinnamon"],
+   short:"溫暖紅棕／肉桂調，較新確立的隱性基因。",
+   desc:"呈溫暖的紅棕、肉桂色調。最早出現於『極紅白化 × 紅白化超級蟒紋』的配對後代，後由 Reptifit 確認為獨立的肉桂基因。為隱性遺傳。",
+   look:"紅棕／肉桂色調", eyes:"深色"},
+
+  {id:11,zh:"開心果",en:"Pistachio",cat:"base",inh:"recessive",
+   sw:"linear-gradient(135deg,#b9bd7a,#8d9450 55%,#636b34)",
+   aka:["Pistachio"],
+   short:"帶綠調的隱性基因，與蟒紋組成『綠妖精』。",
+   desc:"呈現帶綠的色調，為隱性遺傳。與蟒紋組合為雙顯性的『綠妖精 Green Goblin（Pistachio Anaconda）』，與太妃糖腹組合為『開心果太妃糖腹 Pistachio Toffeebelly』。",
+   look:"橄欖／黃綠調", eyes:"深色"},
+
+  {id:12,zh:"蟒紋",en:"Anaconda",cat:"base",inh:"incdom",
+   sw:"linear-gradient(135deg,#9a7e54 0 33%,#6e5638 33% 66%,#4a3a24 66%)",
+   aka:["Conda","減紋","Superconda（超級型）"],
+   short:"減少斑紋的劑量型基因；雙份為近無紋的超級蟒紋。",
+   desc:"蟒紋是劑量依賴的減紋基因，正確分類為不完全顯性（圈內常稱 co-dominant）：單份與雙份外觀明顯不同。\n\n單份（雜合 Conda）：背部斑紋大幅減少且破碎，原本明顯的鞍斑變成破裂的帶狀、減少的點斑或大幅淡化；側面與腹面斑紋同樣減少。\n\n雙份（超級蟒紋 Superconda）：斑紋極度減少趨近全無紋，背部幾乎為單一色，是最具視覺衝擊的表現之一。目前未見超級蟒紋有神經或發育缺陷的紀錄。",
+   look:"單份減紋／破碎；雙份近無紋", eyes:"依底色而定"},
+
+  {id:13,zh:"北極",en:"Arctic",cat:"base",inh:"incdom",
+   sw:"linear-gradient(135deg,#cfd2d4,#9a9da0 55%,#5e6164)",
+   aka:["JMG Axanthic","Super Arctic（超級型）"],
+   short:"共顯／不完全顯性，減少色素、體色變淺；超級型近黑白。",
+   desc:"北極（亦稱 JMG Axanthic）為不完全顯性，會減少色素、使體色變淺。超級型（Super Arctic）為視覺上的黑白個體，幼體偏黑，每次蛻皮後轉為俐落的黑白對比。與薰衣草組合可得冰冷淡色的個體。",
+   look:"單份淺化；超級型黑白", eyes:"深色"},
+
+  {id:14,zh:"RBE 粉彩",en:"RBE Pastel",cat:"base",inh:"dominant",
+   sw:"linear-gradient(135deg,#d9c79a,#b89e66 55%,#8f7842)",
+   aka:["Pastel","RBE Pastel"],
+   short:"顯性基因，外觀乾淨、對比高、略淺。",
+   desc:"屬顯性遺傳，只要帶有此基因即會表現。如同許多物種的粉彩，色彩變化較細微，個體通常很『乾淨』、對比高、整體略淺，常用來讓其他基因看起來更鮮明。",
+   look:"乾淨高對比、略淺", eyes:"深色"},
+
+  {id:15,zh:"白變",en:"Leucistic",cat:"base",inh:"other",
+   sw:"linear-gradient(135deg,#fbfbf8,#ececea 55%,#d8d6d2)",
+   aka:["Leucistic","純白"],
+   short:"近乎純白，被視為猪鼻蛇的『聖杯』之一。",
+   desc:"幼體呈帶粉的白色，成體轉為純白。被許多玩家視為西部猪鼻蛇的『聖杯』morph。其確切遺傳機制在公開資料中說法不一，配對前建議向來源確認血系與遺傳方式。",
+   look:"幼體帶粉白→成體純白", eyes:"深至深紅"},
+
+  {id:16,zh:"極紅",en:"Extreme Red",cat:"base",inh:"recessive",
+   sw:"linear-gradient(135deg,#e8743a,#c8421f 55%,#9c2c14)",
+   aka:["Extreme Red Albino","紅白化"],
+   short:"白化的紅色系極端表現，色調濃烈偏紅。",
+   desc:"為白化基因下的紅色系極端變異，色調濃烈偏紅橘。常作為提升其他白化組合鮮豔度的血系，也是肉桂基因最初出現的親代之一。",
+   look:"濃烈紅橘", eyes:"紅"},
+
+  {id:17,zh:"綠低黑",en:"Green Hypo",cat:"base",inh:"other",
+   sw:"linear-gradient(135deg,#9fae6e,#74854a 55%,#4f5d30)",
+   aka:["Green Hypo"],
+   short:"帶綠的低黑表現，遺傳方式尚未明確。",
+   desc:"呈帶綠的低黑外觀，其遺傳模式仍待釐清——可能為顯性，也有育種者懷疑為多基因（polygenic）。相關研究與紀錄仍在累積中。",
+   look:"帶綠、低黑", eyes:"深色"},
+
+  {id:18,zh:"異化",en:"Paradox",cat:"base",inh:"other",
+   sw:"linear-gradient(135deg,#ffce6e 0 60%,#2b2620 60%)",
+   aka:["Paradox Albino","嵌合"],
+   short:"類嵌合現象，在單一個體上拼接兩種色表現，普遍認為非遺傳。",
+   desc:"異化在猪鼻蛇上表現得像嵌合（chimera），會在同一個體上拼接兩種色彩突變——例如在白化的體色上出現黑色斑塊。普遍認為非遺傳（無法穩定遺傳給後代），但作為收藏個體相當搶眼。",
+   look:"單體拼接兩種色（如白化＋黑斑）", eyes:"依表現而定"},
+
+  // ---- COMBO MORPHS ----
+  {id:19,zh:"雪",en:"Snow",cat:"combo",inh:"combo",
+   sw:"linear-gradient(135deg,#f6f1f2,#e4dfe6 55%,#cfc9d6)",
+   aka:["Albino + Axanthic"],
+   short:"白化＋無黃：近白、帶柔粉、紅眼。",
+   desc:"由白化與無黃雙隱性組成。同時缺少黑色素與黃色素，呈近乎全白並帶柔和粉調，眼睛為紅色。",
+   look:"近白＋柔粉", eyes:"紅", recipe:"白化 ＋ 無黃"},
+
+  {id:20,zh:"珊瑚",en:"Coral",cat:"combo",inh:"combo",
+   sw:"linear-gradient(135deg,#ff9e6e,#ff6f43 55%,#e84f28)",
+   aka:["Albino + Evans Hypo"],
+   short:"白化＋伊凡斯低黑：濃烈橘珊瑚色。",
+   desc:"由白化與伊凡斯低黑組成。低黑的減黑作用與完全白化協同，產生鮮豔濃烈的暖橘珊瑚色。",
+   look:"鮮豔橘珊瑚", eyes:"紅", recipe:"白化 ＋ 伊凡斯低黑"},
+
+  {id:21,zh:"太妃糖光",en:"Toffeeglow",cat:"combo",inh:"combo",
+   sw:"linear-gradient(135deg,#ffe7a8,#ffcf7a 55%,#f2b25e)",
+   aka:["Toffeebelly + T-Albino","Toffeecorn"],
+   short:"太妃糖腹＋白化：淡黃帶粉、紅眼，性格溫馴。",
+   desc:"由太妃糖腹與白化雙隱性組成，呈漂亮的淡黃色帶粉色底調、紅眼。除了外觀討喜，也以性格溫馴著稱。",
+   look:"淡黃＋粉底", eyes:"紅", recipe:"太妃糖腹 ＋ 白化"},
+
+  {id:22,zh:"檸檬幽靈",en:"Lemon Ghost",cat:"combo",inh:"combo",
+   sw:"linear-gradient(135deg,#eee29a,#d6c768 55%,#b3a648)",
+   aka:["Caramel + Evans Hypo"],
+   short:"焦糖＋伊凡斯低黑（確切基礎依血系而異）。",
+   desc:"由焦糖與伊凡斯低黑組成，呈柔和的檸檬黃調。確切的遺傳基礎可能因育種血系而略有差異。",
+   look:"柔和檸檬黃", eyes:"深至紅褐", recipe:"焦糖 ＋ 伊凡斯低黑"},
+
+  {id:23,zh:"太妃糖蟒紋",en:"Toffeeconda",cat:"combo",inh:"combo",
+   sw:"linear-gradient(135deg,#e0b878 0 50%,#c9933f 50%)",
+   aka:["Toffeebelly + Anaconda"],
+   short:"太妃糖腹＋蟒紋：金琥珀腹面遇上減少的背紋。",
+   desc:"由太妃糖腹與蟒紋組成，金琥珀色腹面搭配蟒紋減少後的背部斑紋。",
+   look:"金腹＋減紋背", eyes:"深色", recipe:"太妃糖腹 ＋ 蟒紋"},
+
+  {id:24,zh:"低黑超級蟒紋",en:"Hypo Superconda",cat:"combo",inh:"combo",
+   sw:"linear-gradient(135deg,#f3c79a,#e0a06a 55%,#c98049)",
+   aka:["Hypo + Superconda"],
+   short:"低黑＋超級蟒紋：近無紋、帶蜜桃色。",
+   desc:"由低黑（隱性）與蟒紋的超級型組成，呈現驚艷的無紋外觀並帶蜜桃般的色調。",
+   look:"近無紋＋蜜桃色", eyes:"深色", recipe:"伊凡斯低黑 ＋ 超級蟒紋"},
+
+  {id:25,zh:"白化超級蟒紋",en:"Albino Superconda",cat:"combo",inh:"combo",
+   sw:"linear-gradient(135deg,#ffd97a,#ffb15a 55%,#ff9e4a)",
+   aka:["Albino + Superconda"],
+   short:"白化＋超級蟒紋：無紋的白化體色。",
+   desc:"由白化與蟒紋超級型組成，呈現無紋的白化體色，是極受歡迎的乾淨亮色個體。",
+   look:"無紋＋白化黃橘", eyes:"紅", recipe:"白化 ＋ 超級蟒紋"},
+
+  {id:26,zh:"焦糖超級蟒紋",en:"Caramel Superconda",cat:"combo",inh:"combo",
+   sw:"linear-gradient(135deg,#e6d2a8,#d0b173 55%,#b8924c)",
+   aka:["Caramel + Superconda"],
+   short:"焦糖（T+）＋超級蟒紋：奶油色無紋、頭紋減少。",
+   desc:"由焦糖白化（T+）與蟒紋超級型組成，結果為奶油色的無紋個體，並因焦糖影響使頭部斑紋減少。",
+   look:"奶油色無紋", eyes:"深至紅褐", recipe:"焦糖 ＋ 超級蟒紋"},
+
+  {id:27,zh:"粉紅豹",en:"Pink Panther",cat:"combo",inh:"combo",
+   sw:"linear-gradient(135deg,#f4c2cf,#e497a9 55%,#d2768e)",
+   aka:["Pink Pastel Anaconda","Pink Pastel + Anaconda"],
+   short:"粉彩白化＋蟒紋的雙顯個體。",
+   desc:"由粉彩白化（隱性）與蟒紋（不完全顯性）組成，呈粉色並帶蟒紋的減紋特徵。注意粉彩血系常見的健康問題。",
+   look:"粉色＋減紋", eyes:"紅", recipe:"粉彩 ＋ 蟒紋",
+   warn:"含粉彩血系，常見神經與繁殖力問題，請審慎評估親代健康。"},
+
+  {id:28,zh:"邁泰",en:"Mai Tai",cat:"combo",inh:"combo",
+   sw:"linear-gradient(135deg,#a66a40,#7a4a2c 55%,#502f1c)",
+   aka:["Sable + Toffeebelly"],
+   short:"黑貂＋太妃糖腹的雙隱性個體。",
+   desc:"由黑貂與太妃糖腹雙隱性組成。黑貂的深色與太妃糖腹的暖色相遇，是邁泰系列組合的基礎。",
+   look:"深暖棕＋金腹", eyes:"深色", recipe:"黑貂 ＋ 太妃糖腹"},
+
+  {id:29,zh:"邁泰蟒紋",en:"Mai Tai Anaconda",cat:"combo",inh:"combo",
+   sw:"linear-gradient(135deg,#9c6038 0 50%,#5f3a22 50%)",
+   aka:["Anaconda + Sable + Toffeebelly"],
+   short:"蟒紋＋黑貂＋太妃糖腹的三基因組合。",
+   desc:"由蟒紋、黑貂、太妃糖腹三基因組成的視覺三重組合。",
+   look:"深暖色＋金腹＋減紋", eyes:"深色", recipe:"蟒紋 ＋ 黑貂 ＋ 太妃糖腹"},
+
+  {id:30,zh:"糖果雞尾酒",en:"Candy Cocktail",cat:"combo",inh:"combo",
+   sw:"linear-gradient(135deg,#b06a3e,#7a3f24 55%,#e0b878)",
+   aka:["Mai Tai Superconda","Sable + Toffeebelly + Superconda"],
+   short:"黑貂＋太妃糖腹＋超級蟒紋的無紋三重組合。",
+   desc:"由黑貂、太妃糖腹與蟒紋超級型組成，亦稱『邁泰超級蟒紋』。三基因疊加下呈深暖色的無紋個體。",
+   look:"深暖色無紋", eyes:"深色", recipe:"黑貂 ＋ 太妃糖腹 ＋ 超級蟒紋"},
+
+  {id:31,zh:"超級老爹",en:"Super Daddy",cat:"combo",inh:"combo",
+   sw:"linear-gradient(135deg,#f2c9d8,#dba8d0 55%,#c08fc4)",
+   aka:["Albino + Super Arctic + Superconda"],
+   short:"白化＋超級北極＋超級蟒紋：粉至淡紫、紅眼、無紋。",
+   desc:"由白化（隱性）、北極超級型與蟒紋超級型組成。因無黑色素而呈粉至淡紫調並帶紅眼；超級蟒紋使背部斑紋大多或完全消失，部分個體背部殘留粉紫色條紋；超級北極帶來強對比與成長／蛻皮間明顯的色彩變化。整體底色較其他白化組合更淺、更冷。",
+   look:"粉至淡紫、無紋", eyes:"紅", recipe:"白化 ＋ 超級北極 ＋ 超級蟒紋"},
+
+  {id:32,zh:"綠妖精",en:"Green Goblin",cat:"combo",inh:"combo",
+   sw:"linear-gradient(135deg,#aab86a 0 50%,#6c7a3c 50%)",
+   aka:["Pistachio Anaconda","Pistachio + Anaconda"],
+   short:"開心果＋蟒紋的雙顯個體。",
+   desc:"由開心果與蟒紋組成的雙顯性組合，帶綠調並具蟒紋減紋特徵，暱稱『綠妖精』。",
+   look:"綠調＋減紋", eyes:"深色", recipe:"開心果 ＋ 蟒紋"},
+
+  {id:33,zh:"開心果太妃糖腹",en:"Pistachio Toffeebelly",cat:"combo",inh:"combo",
+   sw:"linear-gradient(135deg,#b9bd7a,#9aa055 55%,#c9933f)",
+   aka:["Pistachio + Toffeebelly"],
+   short:"開心果＋太妃糖腹的視覺組合。",
+   desc:"由開心果與太妃糖腹組成，綠調背部搭配金琥珀腹面。",
+   look:"綠調背＋金腹", eyes:"深色", recipe:"開心果 ＋ 太妃糖腹"},
+
+  {id:34,zh:"灰霧",en:"Grey Fog",cat:"combo",inh:"combo",
+   sw:"linear-gradient(135deg,#c4c6c2,#969892 55%,#6a6c66)",
+   aka:["Grey Fog"],
+   short:"霧灰色系的組合型個體。",
+   desc:"呈柔和霧灰色調的組合型個體，外觀冷調、低彩度。",
+   look:"霧灰色調", eyes:"深色", recipe:"灰調組合（依血系）"},
+
+  {id:35,zh:"紅白化蟒紋",en:"Red Albino Anaconda",cat:"combo",inh:"combo",
+   sw:"linear-gradient(135deg,#ff9a5a 0 50%,#e8662f 50%)",
+   aka:["Red Albino + Anaconda"],
+   short:"紅系白化＋蟒紋：蜜桃黃底、斑塊隨成長變深。",
+   desc:"紅系白化與蟒紋的組合，呈蜜桃黃色底，身上斑塊起初為淡橘，隨個體成長逐漸變深。",
+   look:"蜜桃黃＋減紋", eyes:"紅", recipe:"極紅／紅白化 ＋ 蟒紋"},
+
+  // ---- 中文圈常見命名組合與其他基因 ----
+  {id:36,zh:"毒藥",en:"Toxic",cat:"combo",inh:"combo",
+   sw:"linear-gradient(135deg,#cdd0d2,#9a9d9f 55%,#6a6d6f)",
+   aka:["Axanthic + Toffee Belly","缺黃太妃"],
+   short:"無黃＋太妃糖腹：淡灰、深眼，像雪但無紅黃調。",
+   desc:"由無黃與太妃糖腹組成，呈淡灰色、深色眼。外觀近似『雪』，但缺少紅、黃暖調，可藉此區分。由 Hognoses Germany 於 2013 年首次培育。",
+   look:"淡灰、無暖調", eyes:"深色", recipe:"無黃 ＋ 太妃糖腹"},
+
+  {id:37,zh:"太陽爆炸",en:"Sunburst",cat:"combo",inh:"combo",
+   sw:"linear-gradient(135deg,#ffb87a,#ff7a3a 55%,#e8531f)",
+   aka:["Albino + Sable","白化黑貂"],
+   short:"白化＋黑貂：黑貂增色、白化去黑，化為濃烈橘紅。",
+   desc:"由白化與黑貂組成。黑貂增加色素的特性與白化去除黑色素結合後，紅橘被推到極濃烈，故名『太陽爆炸』，紅眼。",
+   look:"濃烈橘紅", eyes:"紅", recipe:"白化 ＋ 黑貂"},
+
+  {id:38,zh:"太陽爆炸康達",en:"Sunburst Conda",cat:"combo",inh:"combo",
+   sw:"linear-gradient(135deg,#ffb87a,#ff7a3a 55%,#e8531f)",
+   aka:["Albino + Sable + Anaconda"],
+   short:"太陽爆炸再加蟒紋減紋。",
+   desc:"在太陽爆炸（白化＋黑貂）基礎上加入蟒紋，濃烈橘紅配上減少、破碎的斑紋。",
+   look:"濃橘紅＋減紋", eyes:"紅", recipe:"白化 ＋ 黑貂 ＋ 蟒紋"},
+
+  {id:39,zh:"風暴",en:"Storm",cat:"combo",inh:"combo",
+   sw:"linear-gradient(135deg,#7a8084,#4a5054 55%,#262b2e)",
+   aka:["Axanthic + Sable","缺黃黑貂"],
+   short:"無黃＋黑貂：深炭灰、冷調濃郁。",
+   desc:"由無黃與黑貂組成。無黃去暖色、黑貂增色素，疊加成深炭灰、冷調濃郁的個體。",
+   look:"深炭灰", eyes:"深色", recipe:"無黃 ＋ 黑貂"},
+
+  {id:40,zh:"黑冰",en:"Black Ice",cat:"combo",inh:"combo",
+   sw:"linear-gradient(135deg,#7e858a,#51585c 55%,#2a2f32)",
+   aka:["Arctic + Sable","北極黑貂"],
+   short:"北極＋黑貂：深色冷調，黑白對比強。",
+   desc:"由北極與黑貂組成，呈深色冷調、黑白對比強烈的外觀。再加超級北極與蟒紋可得更極致的組合（如超級北極黑貂康達）。",
+   look:"深冷調黑白", eyes:"深色", recipe:"北極 ＋ 黑貂"},
+
+  {id:41,zh:"超焦糖",en:"Ultramel",cat:"combo",inh:"combo",
+   sw:"linear-gradient(135deg,#ffe6bf,#f0c98e 55%,#cf9a55)",
+   aka:["Albino + Caramel","白化焦糖"],
+   short:"白化＋焦糖：柔和淡焦糖、奶橘色，眼偏紅褐。",
+   desc:"由白化與焦糖（T+）組成，兩種去色／轉色機制結合，呈柔和的淡焦糖、奶橘色，眼偏紅褐。",
+   look:"柔和淡焦糖", eyes:"紅褐", recipe:"白化 ＋ 焦糖"},
+
+  {id:42,zh:"香草櫻桃",en:"Vanilla Cherry",cat:"combo",inh:"combo",
+   sw:"linear-gradient(135deg,#f6ecd2,#e7d2a4 55%,#c0a468)",
+   aka:["RBE Pastel + Toffee Belly"],
+   short:"RBE 粉彩＋太妃糖腹：奶白底帶櫻桃暖調。",
+   desc:"由 RBE 粉彩（顯性）與太妃糖腹組成，呈奶白底、帶櫻桃般的暖調；再加超級蟒紋即為『香草櫻桃糖 Vanilla Cherry Candy』。",
+   look:"奶白＋櫻桃暖調", eyes:"深色", recipe:"RBE 粉彩 ＋ 太妃糖腹"},
+
+  {id:43,zh:"雪怪",en:"Yeti",cat:"combo",inh:"combo",
+   sw:"linear-gradient(135deg,#fbf8fa,#ece6ea 55%,#d6cdd4)",
+   aka:["Albino + Axanthic + Anaconda","雪康達"],
+   short:"白化＋無黃＋蟒紋：近白＋減紋（雪的減紋版）。",
+   desc:"由白化、無黃與蟒紋組成，等於『雪』再加蟒紋減紋，呈近白且斑紋減少的個體，紅眼。",
+   look:"近白＋減紋", eyes:"紅", recipe:"白化 ＋ 無黃 ＋ 蟒紋"},
+
+  {id:44,zh:"魔眼",en:"Diablo",cat:"base",inh:"other",
+   sw:"linear-gradient(135deg,#a07d4e,#8a6b3e 55%,#5a4426)",
+   aka:["魔眼"],
+   short:"影響眼睛的基因：整顆眼睛融合成純色，白化下呈紅寶石並提升紅亮度。",
+   desc:"一款影響眼睛表現的基因，視覺上讓整顆眼睛融合為純色。在白化個體上呈現紅寶石般的眼睛，並在一定程度上提升體色的紅色亮度。遺傳機制在中文圈仍多歸於待整理。",
+   look:"眼睛純色化、提升紅亮度", eyes:"純色（白化下紅寶石）"},
+
+  {id:45,zh:"瑞士巧克力",en:"Swiss Chocolate",cat:"base",inh:"recessive",
+   sw:"linear-gradient(135deg,#5a4334,#3a2a1e 55%,#1e140d)",
+   aka:["巧克力","黑化血系"],
+   short:"極深的巧克力黑化血系。",
+   desc:"使個體呈極深巧克力／近黑的黑化血系，幼體即偏黑。與黑貂同屬增黑方向但為另一條血系，常用於加深組合色調（如白化超級康達巧克力）。",
+   look:"極深巧克力／近黑", eyes:"深色"},
+
+  {id:46,zh:"反向條紋",en:"Reverse Stripe",cat:"base",inh:"other",
+   sw:"linear-gradient(135deg,#a78a5a,#8e7048 55%,#54401f)",
+   aka:["Reverse Stripe"],
+   short:"背部呈連續縱向條紋而非分離鞍斑（遺傳待確認）。",
+   desc:"背部花紋呈一條連續的縱向條紋，而非一般分離的鞍斑。其遺傳方式在社群中仍待確認。",
+   look:"連續背部條紋", eyes:"深色"},
+
+  {id:47,zh:"蜘蛛",en:"Spider",cat:"base",inh:"other",
+   sw:"linear-gradient(135deg,#a78a5a,#8e7048 55%,#54401f)",
+   aka:["Spider"],
+   short:"斑紋破碎、細化的花紋型（遺傳待確認）。",
+   desc:"呈現破碎、細化的斑紋表現，命名借自其他物種；在猪鼻蛇上的遺傳方式仍待確認。",
+   look:"破碎細化斑紋", eyes:"深色"},
+
+  {id:48,zh:"金髮",en:"Blonde",cat:"base",inh:"other",
+   sw:"linear-gradient(135deg,#ecdcae,#d9c08a 55%,#b09a60)",
+   aka:["Blonde"],
+   short:"淡金／淺褐的淺色表現（待整理）。",
+   desc:"呈淡金、淺褐的淺色外觀，斑紋對比較柔；在社群中仍多歸於待整理／血系選育。",
+   look:"淡金淺褐", eyes:"深色"},
+
+  {id:49,zh:"綠相",en:"Green Phase",cat:"base",inh:"other",
+   sw:"linear-gradient(135deg,#aab36e,#8d985c 55%,#5a6534)",
+   aka:["Green Phase","綠相"],
+   short:"偏綠的野生相位，可能為多基因。",
+   desc:"野生個體中偏綠的色相，常被用於選育更綠的個體；可能為多基因（polygenic）而非單一基因。",
+   look:"偏綠色相", eyes:"深色"}
+];
+
+const INH = {recessive:["隱性","rec"],incdom:["不完全顯性","inc"],dominant:["顯性","dom"],combo:["組合型","combo"],other:["其他","other"]};
+
+/* ---------- Illustration params per morph: {pat,body,out,sad,lat,pup} ---------- */
+const RED="#bb3a4a", DK="#1c150c";
+const ILL = {
+  1:{pat:2,body:"#8a6b3e",out:"#4a3a22",sad:"#36291a",lat:"#4a3a22",pup:DK},
+  2:{pat:2,body:"#ffc163",out:"#cf7a2a",sad:"#fff2d2",lat:"#ffe6ad",pup:RED},
+  3:{pat:2,body:"#8b9298",out:"#4a5158",sad:"#2b3036",lat:"#3a4046",pup:DK},
+  4:{pat:2,body:"#c08f4e",out:"#7e5424",sad:"#6b4720",lat:"#7e5424",pup:"#5a2a16"},
+  5:{pat:2,body:"#e0a155",out:"#a3632f",sad:"#8a5026",lat:"#a3632f",pup:DK},
+  6:{pat:2,body:"#a594c0",out:"#6d5a85",sad:"#564670",lat:"#6d5a85",pup:"#3e2a52"},
+  7:{pat:1,body:"#efb3c2",out:"#cf7d92",sad:"#ffe2e9",lat:"#f7cdd7",pup:RED},
+  8:{pat:2,body:"#4a3a2c",out:"#241c15",sad:"#15100b",lat:"#241c15",pup:DK},
+  9:{pat:2,body:"#cf9c4a",out:"#8a6024",sad:"#6f4c1f",lat:"#8a6024",pup:DK},
+  10:{pat:2,body:"#9a5530",out:"#5a3019",sad:"#44230f",lat:"#5a3019",pup:DK},
+  11:{pat:2,body:"#9aa055",out:"#5d6430",sad:"#474e22",lat:"#5d6430",pup:DK},
+  12:{pat:1,body:"#8e7048",out:"#54401f",sad:"#3f3019",lat:"#4a3a22",pup:DK},
+  13:{pat:2,body:"#aeb1b4",out:"#6a6d70",sad:"#4a4d50",lat:"#6a6d70",pup:DK},
+  14:{pat:2,body:"#c4ab6e",out:"#8a7038",sad:"#6f5a2c",lat:"#8a7038",pup:DK},
+  15:{pat:0,body:"#f4f3ef",out:"#cfccc6",sad:"#e8e6e2",lat:"#e8e6e2",pup:"#5a3a3a"},
+  16:{pat:2,body:"#e0683a",out:"#b23a18",sad:"#ffe2c0",lat:"#ffcf9e",pup:RED},
+  17:{pat:2,body:"#88985a",out:"#4f5d30",sad:"#3a4623",lat:"#4f5d30",pup:DK},
+  18:{pat:2,body:"#ffc163",out:"#cf7a2a",sad:"#2a2018",lat:"#2a2018",pup:RED},
+  19:{pat:1,body:"#f1ecef",out:"#cdc2c9",sad:"#e0d6dd",lat:"#e8dee5",pup:RED},
+  20:{pat:2,body:"#ff8f5a",out:"#d85f30",sad:"#ffd9bf",lat:"#ffc7a6",pup:RED},
+  21:{pat:1,body:"#ffdf9a",out:"#e0b15a",sad:"#fff6df",lat:"#ffeecb",pup:RED},
+  22:{pat:2,body:"#e2d27a",out:"#b3a14a",sad:"#f5edb8",lat:"#ece0a0",pup:DK},
+  23:{pat:1,body:"#d8a85a",out:"#9a7030",sad:"#7a5524",lat:"#9a7030",pup:DK},
+  24:{pat:0,body:"#f0b97f",out:"#cf8f4f",sad:"#cf8f4f",lat:"#cf8f4f",pup:DK},
+  25:{pat:0,body:"#ffc163",out:"#cf7a2a",sad:"#cf7a2a",lat:"#cf7a2a",pup:RED},
+  26:{pat:0,body:"#e6d2a0",out:"#c0a468",sad:"#c0a468",lat:"#c0a468",pup:DK},
+  27:{pat:1,body:"#efacbe",out:"#cf7d92",sad:"#ffe2e9",lat:"#f7cdd7",pup:RED},
+  28:{pat:2,body:"#8a5836",out:"#4f2f1c",sad:"#3a2114",lat:"#4f2f1c",pup:DK},
+  29:{pat:1,body:"#8a5836",out:"#4f2f1c",sad:"#3a2114",lat:"#4f2f1c",pup:DK},
+  30:{pat:0,body:"#9a5e38",out:"#5f3a22",sad:"#5f3a22",lat:"#5f3a22",pup:DK},
+  31:{pat:0,body:"#e6bcd6",out:"#c08fbf",sad:"#c08fbf",lat:"#c08fbf",pup:RED},
+  32:{pat:1,body:"#9aa860",out:"#5d6430",sad:"#474e22",lat:"#5d6430",pup:DK},
+  33:{pat:2,body:"#9aa055",out:"#5d6430",sad:"#474e22",lat:"#5d6430",pup:DK},
+  34:{pat:2,body:"#a6a8a4",out:"#6a6c68",sad:"#4c4e4a",lat:"#6a6c68",pup:DK},
+  35:{pat:1,body:"#ff9a5a",out:"#d8662f",sad:"#ffd9b8",lat:"#ffc79e",pup:RED},
+  36:{pat:2,body:"#b9bcbe",out:"#6a6d6f",sad:"#44484b",lat:"#565a5d",pup:DK},
+  37:{pat:2,body:"#ff8a3a",out:"#d8581f",sad:"#fff0cf",lat:"#ffd9a6",pup:RED},
+  38:{pat:1,body:"#ff8a3a",out:"#d8581f",sad:"#fff0cf",lat:"#ffd9a6",pup:RED},
+  39:{pat:2,body:"#4a5054",out:"#23282b",sad:"#14181a",lat:"#23282b",pup:DK},
+  40:{pat:2,body:"#51585c",out:"#262b2e",sad:"#161a1c",lat:"#2a2f32",pup:DK},
+  41:{pat:2,body:"#f0c98e",out:"#cf9a55",sad:"#fff0d6",lat:"#ffe6bf",pup:"#8a3a2a"},
+  42:{pat:2,body:"#e7d2a4",out:"#b89a5e",sad:"#f6ecd2",lat:"#ecdcb8",pup:DK},
+  43:{pat:1,body:"#f1ecef",out:"#cdc2c9",sad:"#e2d6dd",lat:"#e8dee5",pup:RED},
+  44:{pat:2,body:"#8a6b3e",out:"#4a3a22",sad:"#36291a",lat:"#4a3a22",pup:"#c0202a"},
+  45:{pat:2,body:"#3a2a1e",out:"#1e140d",sad:"#120c07",lat:"#1e140d",pup:DK},
+  46:{pat:2,body:"#8e7048",out:"#54401f",sad:"#33271a",lat:"#4a3a22",pup:DK,stripe:true},
+  47:{pat:1,body:"#8a6b3e",out:"#4a3a22",sad:"#36291a",lat:"#4a3a22",pup:DK},
+  48:{pat:2,body:"#d9c08a",out:"#a08850",sad:"#8a6f3c",lat:"#a08850",pup:DK},
+  49:{pat:2,body:"#8d985c",out:"#5a6534",sad:"#424c26",lat:"#5a6534",pup:DK}
+};
+const DEF_ILL={pat:2,body:"#9a8050",out:"#54401f",sad:"#3a2c18",lat:"#4a3a22",pup:DK};
+
+/* ---------- Cartoon snake generator (coiled body + title-logo head) ---------- */
+const _NS="http://www.w3.org/2000/svg";
+const SPTS=(()=>{const a=[],cx=176,cy=99,thMax=10.6,st=150;for(let i=0;i<=st;i++){const th=thMax*i/st,r=14+5*th;a.push([cx+r*Math.cos(th),cy+r*Math.sin(th)]);}return a;})();
+const SD='M '+SPTS.map(p=>p[0].toFixed(1)+' '+p[1].toFixed(1)).join(' L ');
+const HEAD="M8 40c0-13 9-23 22-23 9 0 15 4 19 9 4-1 9 0 11 4 1 3-1 6-4 6-2 5-7 9-14 10";
+function renderSnake(svg, ill){
+  ill = ill || DEF_ILL;
+  const s = ill;
+  const tmp=document.createElementNS(_NS,'path'); tmp.setAttribute('d',SD); svg.appendChild(tmp);
+  let L=0; try{L=tmp.getTotalLength();}catch(e){}
+  let inner=`<rect width="360" height="200" fill="#efe7d4"/>`;
+  if(!L){ inner+=`<path d="${SD}" fill="none" stroke="${s.body}" stroke-width="24" stroke-linecap="round"/>`; svg.innerHTML=inner; return; }
+  inner+=`<path d="${SD}" fill="none" stroke="${s.out}" stroke-width="30" stroke-linecap="round" stroke-linejoin="round"/>`;
+  inner+=`<path d="${SD}" fill="none" stroke="${s.body}" stroke-width="24" stroke-linecap="round" stroke-linejoin="round"/>`;
+  if(s.stripe){
+    inner+=`<path d="${SD}" fill="none" stroke="${s.sad}" stroke-width="5.5" stroke-linecap="round" opacity="0.9"/>`;
+  } else if(s.pat>0){
+    const count=s.pat===2?22:15;
+    for(let j=0;j<count;j++){
+      const len=16+(L-62)*(j/(count-1));
+      if(s.pat===1 && j%3===2) continue;
+      const p=tmp.getPointAtLength(len), p2=tmp.getPointAtLength(Math.min(L,len+1));
+      const ang=Math.atan2(p2.y-p.y,p2.x-p.x)*180/Math.PI;
+      const along=s.pat===2?9:7, across=s.pat===2?20:13;
+      inner+=`<g transform="translate(${p.x.toFixed(1)} ${p.y.toFixed(1)}) rotate(${ang.toFixed(1)})"><rect x="${-along/2}" y="${-across/2}" width="${along}" height="${across}" rx="3" fill="${s.sad}" opacity="${s.pat===2?0.95:0.7}"/></g>`;
+      if(s.pat===2 && j%2===0){
+        inner+=`<g transform="translate(${p.x.toFixed(1)} ${p.y.toFixed(1)}) rotate(${ang.toFixed(1)})"><circle cx="0" cy="13" r="2.6" fill="${s.lat}" opacity="0.8"/><circle cx="0" cy="-13" r="2.6" fill="${s.lat}" opacity="0.8"/></g>`;
+      }
+    }
+  }
+  const pL=tmp.getPointAtLength(L), pP=tmp.getPointAtLength(L-5);
+  const hang=Math.atan2(pL.y-pP.y,pL.x-pP.x)*180/Math.PI;
+  inner+=`<g transform="translate(${pL.x.toFixed(1)} ${pL.y.toFixed(1)}) rotate(${hang.toFixed(1)}) scale(0.82) translate(-9 -31)">`+
+    `<path d="${HEAD} Z" fill="${s.body}"/>`+
+    `<path d="${HEAD}" fill="none" stroke="${s.out}" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>`+
+    `<path d="M58 36c2.4 0 4 1.7 4 3.3s-2 2.7-4 2.4" fill="none" stroke="#c0303d" stroke-width="2.2" stroke-linecap="round"/>`+
+    `<path d="M14 46c4 3 9 4 14 3" fill="none" stroke="${s.out}" stroke-width="2.2" stroke-linecap="round"/>`+
+    `<circle cx="24" cy="32" r="3" fill="${s.pup}"/><circle cx="22.8" cy="30.7" r="1" fill="#fff" opacity="0.9"/>`+
+    `</g>`;
+  svg.innerHTML=inner;
+}
+function fillIllustrations(root){
+  (root||document).querySelectorAll('svg.ill[data-id]').forEach(sv=>{
+    if(sv.dataset.done) return;
+    if(!sv.getClientRects().length) return;   // hidden tab: defer until shown
+    renderSnake(sv, ILL[+sv.dataset.id]); sv.dataset.done="1";
+  });
+}
+
+/* ---------- Photos: prefer embedded (base64) > images/ folder > color swatch ---------- */
+const PHOTOS = Object.assign({}, window.__PHOTOS__ || {});   // {id: dataURL}, baked into exported file
+const EXTS=["jpg","jpeg","png","webp"];
+function photoTag(id){
+  if(PHOTOS[id]) return `<img class="photo" alt="" src="${PHOTOS[id]}">`;
+  return `<img class="photo" alt="" loading="lazy" decoding="async" src="images/${id}.${EXTS[0]}" data-id="${id}" data-step="0" onerror="nextPhoto(this)">`;
+}
+window.nextPhoto=function(img){
+  const s=+img.dataset.step+1;
+  if(s<EXTS.length){img.dataset.step=s;img.src="images/"+img.dataset.id+"."+EXTS[s];}
+  else{img.remove();}   // no photo found -> reveal color swatch
+};
+
+/* ---------- Stats ---------- */
+document.getElementById("s-base").textContent  = M.filter(m=>m.cat==="base").length;
+document.getElementById("s-combo").textContent = M.filter(m=>m.cat==="combo").length;
+document.getElementById("s-rec").textContent   = M.filter(m=>m.inh==="recessive").length;
+document.getElementById("s-total").textContent = M.length;
+
+/* ---------- Render grid ---------- */
+const grid=document.getElementById("grid"), countEl=document.getElementById("count");
+let filter="all", query="";
+
+function visible(){
+  return M.filter(m=>{
+    const f = filter==="all" || m.cat===filter || m.inh===filter;
+    const q = !query || (m.zh+m.en+(m.aka||[]).join("")).toLowerCase().includes(query);
+    return f && q;
+  });
+}
+function render(){
+  const list=visible();
+  countEl.textContent = `顯示 ${list.length} / ${M.length} 筆`;
+  if(!list.length){
+    grid.innerHTML=`<div class="empty" style="grid-column:1/-1"><b>沒有符合的基因</b>換個關鍵字或清除篩選試試。</div>`;
+    return;
+  }
+  grid.innerHTML = list.map(m=>{
+    const ic=INH[m.inh][1], iname=INH[m.inh][0];
+    return `<article class="card${PHOTOS[m.id]?' has':''}" data-id="${m.id}" tabindex="0" role="button" aria-label="${m.zh}">
+      <div class="plate" style="background:${m.sw}">
+        <svg class="ill" data-id="${m.id}" viewBox="0 0 360 200" preserveAspectRatio="xMidYMid slice" aria-hidden="true"></svg>
+        ${photoTag(m.id)}
+        <div class="topscrim"></div>
+        <span class="spec">No.${String(m.id).padStart(2,"0")}</span>
+        <span class="badge ${ic}">${iname}</span>
+        <span class="haspic">已加入照片</span>
+        <div class="editbadge">點選或拖曳照片<small>No.${String(m.id).padStart(2,"0")} · ${m.zh}</small></div>
+      </div>
+      <div class="cbody">
+        <h3>${m.zh}</h3>
+        <div class="en">${m.en}</div>
+        <p>${m.short}</p>
+        ${m.warn?`<div class="warn"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3 2 20h20L12 3Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M12 9v5M12 17v.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>健康注意</div>`:""}
+      </div>
+    </article>`;
+  }).join("");
+  fillIllustrations(grid);
+}
+document.getElementById("chips").addEventListener("click",e=>{
+  const b=e.target.closest(".chip"); if(!b)return;
+  filter=b.dataset.f;
+  [...document.querySelectorAll(".chip")].forEach(c=>c.dataset.on = c===b?"1":"0");
+  render();
+});
+document.getElementById("q").addEventListener("input",e=>{query=e.target.value.trim().toLowerCase();render();});
+
+/* ---------- Modal ---------- */
+const scrim=document.getElementById("scrim"), sheet=document.getElementById("sheet");
+function openCard(id){
+  const m=M.find(x=>x.id===id); if(!m)return;
+  const ic=INH[m.inh][1], iname=INH[m.inh][0];
+  sheet.innerHTML=`
+    <div class="hero" style="background:${m.sw}">
+      <svg class="ill" data-id="${m.id}" viewBox="0 0 360 200" preserveAspectRatio="xMidYMid slice" aria-hidden="true"></svg>
+      ${photoTag(m.id)}
+      <div class="topscrim"></div>
+      <span class="spec">No.${String(m.id).padStart(2,"0")} · ${m.cat==="base"?"基底基因":"組合型"}</span>
+      <button class="x" aria-label="關閉">✕</button>
+    </div>
+    <div class="scont">
+      <span class="badge2 b-${ic}">${iname}</span>
+      <h2>${m.zh}</h2>
+      <div class="en2">${m.en}</div>
+      ${m.aka&&m.aka.length?`<div class="aka">別名／組成：<b>${m.aka.join("、")}</b></div>`:""}
+      <p class="desc">${m.desc.replace(/\n/g,"<br>")}</p>
+      <div class="meta">
+        ${m.recipe?`<div class="row"><span class="k">配方</span><span>${m.recipe}</span></div>`:""}
+        <div class="row"><span class="k">外觀</span><span>${m.look||"—"}</span></div>
+        <div class="row"><span class="k">眼睛</span><span>${m.eyes||"—"}</span></div>
+        <div class="row"><span class="k">遺傳</span><span>${iname}（${m.cat==="base"?"基底":"組合"}）</span></div>
+      </div>
+      ${m.warn?`<div class="warn2"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3 2 20h20L12 3Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M12 9v5M12 17v.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span>${m.warn}</span></div>`:""}
+    </div>`;
+  scrim.dataset.open="1";
+  document.body.style.overflow="hidden";
+  fillIllustrations(sheet);
+  sheet.querySelector(".x").addEventListener("click",closeCard);
+}
+function closeCard(){scrim.dataset.open="0";document.body.style.overflow="";}
+grid.addEventListener("click",e=>{const c=e.target.closest(".card");if(c)openCard(+c.dataset.id);});
+grid.addEventListener("keydown",e=>{if((e.key==="Enter"||e.key===" ")){const c=e.target.closest(".card");if(c){e.preventDefault();openCard(+c.dataset.id);}}});
+scrim.addEventListener("click",e=>{if(e.target===scrim)closeCard();});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&scrim.dataset.open==="1")closeCard();});
+
+/* ---------- Calculator (multi-gene) ---------- */
+const CALC=[
+  {key:"albino",label:"白化（隱性）",type:"rec",visual:"白化"},
+  {key:"axanthic",label:"無黃（隱性）",type:"rec",visual:"無黃"},
+  {key:"caramel",label:"焦糖（隱性）",type:"rec",visual:"焦糖"},
+  {key:"hypo",label:"伊凡斯低黑（隱性）",type:"rec",visual:"低黑"},
+  {key:"lavender",label:"薰衣草（隱性）",type:"rec",visual:"薰衣草"},
+  {key:"sable",label:"黑貂（隱性）",type:"rec",visual:"黑貂"},
+  {key:"toffee",label:"太妃糖腹（隱性）",type:"rec",visual:"太妃糖腹"},
+  {key:"anaconda",label:"蟒紋（不完全顯性）",type:"inc",single:"蟒紋",sup:"超級蟒紋"},
+  {key:"arctic",label:"北極（不完全顯性）",type:"inc",single:"北極",sup:"超級北極"}
+];
+// known combo names keyed by sorted set of expressed base-gene keys
+const COMBO_NAMES={
+  "albino,axanthic":"雪 Snow","albino,hypo":"珊瑚 Coral","albino,caramel":"超焦糖 Ultramel",
+  "albino,sable":"太陽爆炸 Sunburst","albino,toffee":"太妃糖光 Toffeeglow",
+  "axanthic,toffee":"毒藥 Toxic","axanthic,sable":"風暴 Storm","arctic,sable":"黑冰 Black Ice",
+  "caramel,hypo":"檸檬幽靈 Lemon Ghost","sable,toffee":"邁泰 Mai Tai","anaconda,toffee":"太妃糖蟒紋 Toffeeconda",
+  "albino,axanthic,anaconda":"雪怪 Yeti","albino,anaconda":"白化蟒紋系","sable,toffee,anaconda":"邁泰蟒紋系"
+};
+const PSTATE=[["AA","正常（無基因）"],["Aa","帶因 het"],["aa","顯性表現 visual"]];
+const PSTATE_INC=[["AA","正常（無基因）"],["Aa","單份表現"],["aa","超級型"]];
+const COLS=["var(--combo)","var(--inc)","var(--rec)","var(--dom)","var(--amber)","var(--other)"];
+
+const rowsBox=document.getElementById("g-rows"), barsBox=document.getElementById("g-bars");
+const hetsBox=document.getElementById("g-hets"), resBox=document.getElementById("g-res");
+let calcRows=[{gene:"albino",a:"Aa",b:"Aa"}];
+
+function gcd(a,b){return b?gcd(b,a%b):a;}
+function alleles(g){return g==="AA"?["A","A"]:g==="aa"?["a","a"]:["A","a"];}
+
+function renderRows(){
+  rowsBox.innerHTML=calcRows.map((r,i)=>{
+    const c=CALC.find(x=>x.key===r.gene);
+    const ps=(c.type==="rec"?PSTATE:PSTATE_INC).map(([v,l])=>`<option value="${v}"${v===r.a?" selected":""}>${l}</option>`).join("");
+    const pb=(c.type==="rec"?PSTATE:PSTATE_INC).map(([v,l])=>`<option value="${v}"${v===r.b?" selected":""}>${l}</option>`).join("");
+    const gopt=CALC.map(c2=>`<option value="${c2.key}"${c2.key===r.gene?" selected":""}>${c2.label}</option>`).join("");
+    return `<div class="grow" data-i="${i}">
+      <div class="field"><label>基因 GENE</label><select data-k="gene">${gopt}</select></div>
+      <div class="field"><label>親代 A</label><select data-k="a">${ps}</select></div>
+      <div class="field"><label>親代 B</label><select data-k="b">${pb}</select></div>
+      <button class="grow-x" data-k="del" type="button" aria-label="移除" title="移除"${calcRows.length<=1?" disabled":""}>✕</button>
+    </div>`;
+  }).join("");
+  compute();
+}
+rowsBox.addEventListener("change",e=>{
+  const sel=e.target.closest("select"); if(!sel) return;
+  const i=+sel.closest(".grow").dataset.i, k=sel.dataset.k;
+  calcRows[i][k]=sel.value;
+  if(k==="gene"){ const c=CALC.find(x=>x.key===sel.value); calcRows[i].a="Aa"; calcRows[i].b="Aa"; }
+  renderRows();
+});
+rowsBox.addEventListener("click",e=>{
+  const b=e.target.closest('[data-k="del"]'); if(!b) return;
+  const i=+b.closest(".grow").dataset.i;
+  if(calcRows.length>1){ calcRows.splice(i,1); renderRows(); }
+});
+document.getElementById("g-add").addEventListener("click",()=>{
+  const used=calcRows.map(r=>r.gene);
+  const next=(CALC.find(c=>!used.includes(c.key))||CALC[0]).key;
+  calcRows.push({gene:next,a:"Aa",b:"Aa"}); renderRows();
+});
+
+function geneDist(c,ga,gb){
+  const A=alleles(ga), B=alleles(gb), t={AA:0,Aa:0,aa:0};
+  A.forEach(x=>B.forEach(y=>{const g=(x==="A"&&y==="A")?"AA":(x==="a"&&y==="a")?"aa":"Aa";t[g]++;}));
+  if(c.type==="rec"){
+    return {states:[{name:c.visual,key:c.key,w:t.aa},{name:null,key:null,w:t.AA+t.Aa}],
+            het:(t.AA+t.Aa)?t.Aa/(t.AA+t.Aa):0, vis:c.visual};
+  }
+  return {states:[{name:c.sup,key:c.key,w:t.aa},{name:c.single,key:c.key,w:t.Aa},{name:null,key:null,w:t.AA}], het:0};
+}
+
+function compute(){
+  const dists=calcRows.map(r=>geneDist(CALC.find(x=>x.key===r.gene),r.a,r.b));
+  // cartesian product
+  let outs=[{w:1,keys:[],names:[]}];
+  dists.forEach(d=>{
+    const next=[];
+    d.states.forEach(s=>{ if(s.w===0) return;
+      outs.forEach(o=>{
+        next.push({w:o.w*s.w, keys:s.key?o.keys.concat(s.key):o.keys.slice(), names:s.name?o.names.concat(s.name):o.names.slice()});
+      });
+    });
+    outs=next;
+  });
+  const total=Math.pow(4,calcRows.length);
+  // merge identical outcomes (same name set)
+  const map={};
+  outs.forEach(o=>{ const id=o.names.slice().sort().join("|")||"_normal"; if(!map[id])map[id]={w:0,names:o.names,keys:o.keys}; map[id].w+=o.w; });
+  let list=Object.values(map).map(o=>{
+    const label=o.names.length?o.names.join(" ＋ "):"正常外觀";
+    const ck=o.keys.slice().sort().join(",");
+    const friendly=COMBO_NAMES[ck];
+    return {label, friendly, w:o.w};
+  }).filter(o=>o.w>0).sort((a,b)=>b.w-a.w);
+
+  const MAXBARS=18; let extra=0;
+  if(list.length>MAXBARS){ extra=list.slice(MAXBARS).reduce((s,o)=>s+o.w,0); list=list.slice(0,MAXBARS); }
+
+  barsBox.innerHTML=list.map((o,i)=>{
+    const g=gcd(o.w,total)||1, num=o.w/g, den=total/g;
+    const pct=o.w/total*100;
+    const name=o.label+(o.friendly?` <span class="combo-tag">＝${o.friendly}</span>`:"");
+    return `<div class="bar"><span class="lab">${name}</span>
+      <span class="track"><span class="fill" style="width:0%;background:${COLS[i%COLS.length]}"></span></span>
+      <span class="pct">${num}/${den}</span></div>`;
+  }).join("") + (extra?`<div class="bar"><span class="lab" style="color:var(--ink-soft)">其餘較低機率組合</span><span class="track"></span><span class="pct">${Math.round(extra/total*100)}%</span></div>`:"");
+
+  // het notes for recessive genes
+  const notes=[];
+  calcRows.forEach((r,i)=>{
+    const c=CALC.find(x=>x.key===r.gene), d=dists[i];
+    if(c.type==="rec" && d.het>0){
+      const pct=Math.round(d.het*100);
+      notes.push(`<b>${c.visual}</b>：外觀正常的後代中約 ${pct===100?"100%（全部）":pct+"%"} 為 het 帶因`);
+    }
+  });
+  hetsBox.innerHTML = notes.length ? `<div class="hets-t">帶因 het 提示</div>`+notes.map(n=>`<div class="hets-l">• ${n}</div>`).join("") : "";
+
+  resBox.dataset.show="1";
+  requestAnimationFrame(()=>{
+    [...barsBox.querySelectorAll(".bar")].forEach((bar,i)=>{ if(list[i]){const f=bar.querySelector(".fill"); if(f)f.style.width=(list[i].w/total*100)+"%";} });
+  });
+}
+renderRows();
+
+/* ---------- Tabs ---------- */
+const VIEWS={morphs:document.getElementById("view-morphs"),calc:document.getElementById("view-calc"),care:document.getElementById("view-care"),health:document.getElementById("view-health"),breed:document.getElementById("view-breed"),hatch:document.getElementById("view-hatch"),feedlog:document.getElementById("view-feedlog")};
+document.querySelector(".tabs").addEventListener("click",e=>{
+  const b=e.target.closest(".tab"); if(!b) return;
+  const v=b.dataset.view;
+  document.querySelectorAll(".tabs .tab").forEach(t=>t.dataset.on = t===b?"1":"0");
+  Object.keys(VIEWS).forEach(k=>{ VIEWS[k].hidden = (k!==v); });
+  fillIllustrations(VIEWS[v]);
+  window.scrollTo({top:0});
+});
+
+/* ---------- Breeding timeline calculator ---------- */
+(function(){
+  const mate=document.getElementById("bt-mate"),
+        lay=document.getElementById("bt-lay"),
+        temp=document.getElementById("bt-temp"),
+        res=document.getElementById("bt-res"),
+        line=document.getElementById("bt-timeline"),
+        note=document.getElementById("bt-note"),
+        clearBtn=document.getElementById("bt-clear");
+  if(!mate) return;
+  const KEY="hognose.breedTimeline.v1";
+
+  const GEST=[28,45];                                   // 交配 → 產卵（天）
+  const INC={warm:[50,55],mid:[55,60],cool:[60,64]};    // 產卵 → 出殼（天）
+  const DAY=86400000;
+  const today=sod(new Date());
+  function sod(d){return new Date(d.getFullYear(),d.getMonth(),d.getDate());}
+  function parse(v){ if(!v) return null; const p=v.split("-").map(Number); return new Date(p[0],p[1]-1,p[2]); }
+  function addD(d,n){ return new Date(d.getFullYear(),d.getMonth(),d.getDate()+n); }
+  function fmt(d){ const w="日一二三四五六"[d.getDay()];
+    return `${d.getFullYear()}/${String(d.getMonth()+1).padStart(2,"0")}/${String(d.getDate()).padStart(2,"0")}（${w}）`; }
+  function diff(d){ return Math.round((sod(d)-today)/DAY); }
+  function cdOne(d){ const n=diff(d);
+    if(n>1) return {txt:`還有 ${n} 天`,due:false};
+    if(n===1) return {txt:"就在明天",due:true};
+    if(n===0) return {txt:"就是今天",due:true};
+    return {txt:`已過 ${-n} 天`,due:false}; }
+  function cdRange(a,b){ const na=diff(a),nb=diff(b);
+    if(nb<0) return {txt:"預估區間已過",due:false};
+    if(na>0) return {txt:`約還有 ${na}–${nb} 天`,due:false};
+    return {txt:"已進入預估區間",due:true}; }
+
+  function render2(){
+    save();
+    const m=parse(mate.value), layA=parse(lay.value);
+    if(!m && !layA){ res.dataset.show="0"; return; }
+    res.dataset.show="1";
+    const inc=INC[temp.value], steps=[];
+
+    if(m){ steps.push({t:"交配日",d:fmt(m),cd:cdOne(m)}); }
+
+    let layLo,layHi;
+    if(layA){ layLo=layHi=layA; steps.push({t:"產卵日（實際）",d:fmt(layA),cd:cdOne(layA)}); }
+    else { layLo=addD(m,GEST[0]); layHi=addD(m,GEST[1]);
+      const mid=addD(m,Math.round((GEST[0]+GEST[1])/2));
+      steps.push({t:"預計產卵",d:`${fmt(layLo)} ～ ${fmt(layHi)}`,sub:`最可能約 ${fmt(mid)}（交配後 28–45 天）`,cd:cdRange(layLo,layHi)}); }
+
+    const hLo=addD(layLo,inc[0]), hHi=addD(layHi,inc[1]);
+    steps.push({t:"預計出殼",d:`${fmt(hLo)} ～ ${fmt(hHi)}`,
+      sub:layA?`孵化約 ${inc[0]}–${inc[1]} 天`:"產卵後回填實際產卵日可更準",cd:cdRange(hLo,hHi)});
+
+    line.innerHTML=steps.map(s=>`
+      <div class="bt-step">
+        <span class="bt-dot"></span>
+        <div>
+          <div class="t">${s.t}</div>
+          <div class="d">${s.d}</div>
+          ${s.sub?`<div class="bt-sub">${s.sub}</div>`:""}
+          <span class="bt-cd${s.cd.due?" due":""}">${s.cd.txt}</span>
+        </div>
+      </div>`).join("");
+
+    note.textContent="產卵約在交配後 28–45 天、孵化約 50–64 天（隨溫度而變），以上僅為期望範圍，實際依個體、溫度與健康狀況而異。出殼後約 7–10 天首次蛻皮再開食。";
+  }
+
+  function save(){
+    try{ localStorage.setItem(KEY,JSON.stringify({mate:mate.value,lay:lay.value,temp:temp.value})); }catch(e){}
+  }
+  function load(){
+    try{
+      const s=JSON.parse(localStorage.getItem(KEY)||"null");
+      if(!s) return;
+      if(s.mate) mate.value=s.mate;
+      if(s.lay)  lay.value=s.lay;
+      if(s.temp) temp.value=s.temp;
+    }catch(e){}
+  }
+
+  clearBtn.addEventListener("click",()=>{
+    mate.value=""; lay.value=""; temp.value="mid";
+    try{ localStorage.removeItem(KEY); }catch(e){}
+    res.dataset.show="0";
+  });
+
+  load();
+  [mate,lay,temp].forEach(el=>el.addEventListener("input",render2));
+  render2();
+})();
+
+/* ---------- Feeding log ---------- */
+(function(){
+  const list=document.getElementById("fl-list"),
+        addBtn=document.getElementById("fl-add"),
+        clearBtn=document.getElementById("fl-clear"),
+        empty=document.getElementById("fl-empty");
+  if(!list) return;
+  const KEY="hognose.feedLog.v1";
+  let state=load();
+
+  function load(){ try{ const s=JSON.parse(localStorage.getItem(KEY)||"null"); if(s&&Array.isArray(s.snakes)) return s; }catch(e){} return {snakes:[]}; }
+  function save(){ try{ localStorage.setItem(KEY,JSON.stringify(state)); }catch(e){} }
+  function uid(){ return Date.now().toString(36)+Math.random().toString(36).slice(2,6); }
+  function esc(s){ return (s||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c])); }
+  function todayStr(){ const d=new Date(); return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"); }
+  function fmtD(s){ if(!s) return ""; const p=s.split("-"); return p[0]+"/"+p[1]+"/"+p[2]; }
+  function daysSince(s){ if(!s) return null; const p=s.split("-").map(Number); const d=new Date(p[0],p[1]-1,p[2]);
+    const t=new Date(), t0=new Date(t.getFullYear(),t.getMonth(),t.getDate()); return Math.round((t0-d)/86400000); }
+  function find(id){ return state.snakes.find(s=>s.id===id); }
+
+  function statsHTML(s){
+    const logs=s.logs||[], att=logs.length, eaten=logs.filter(l=>l.result==="eaten").length;
+    const lastEaten=logs.filter(l=>l.result==="eaten").map(l=>l.date).sort().pop();
+    const rate=att?Math.round(eaten/att*100):0, ds=daysSince(lastEaten);
+    const dtxt=lastEaten?`距上次進食 <b>${ds} 天</b>（${fmtD(lastEaten)}）`:"<b>尚無成功進食</b>";
+    let wtxt="";
+    const weighed=logs.filter(l=>l.weight!==undefined&&l.weight!=="")
+                      .slice().sort((a,b)=> a.date<b.date?-1:a.date>b.date?1:0);
+    if(weighed.length){
+      const cur=parseFloat(weighed[weighed.length-1].weight);
+      let delta="";
+      if(weighed.length>1){
+        const prev=parseFloat(weighed[weighed.length-2].weight);
+        if(!isNaN(cur)&&!isNaN(prev)){ const d=Math.round((cur-prev)*10)/10;
+          delta=`（較前次 ${d>0?"+":""}${d} g）`; }
+      }
+      if(!isNaN(cur)) wtxt=`<span>目前體重 <b>${cur} g</b>${delta}</span>`;
+    }
+    return `<span>嘗試 <b>${att}</b> 次 · 成功 <b>${eaten}</b>（${rate}%）</span><span>${dtxt}</span>${wtxt}`;
+  }
+  function logsHTML(s){
+    const logs=(s.logs||[]).slice().sort((a,b)=> a.date<b.date?1:a.date>b.date?-1:0);
+    if(!logs.length) return `<div class="fl-note" style="border:none;padding:0;margin:0">尚無餵食紀錄。</div>`;
+    return logs.map(l=>`
+      <div class="fl-entry">
+        <span class="fl-badge fl-${l.result}">${l.result==="eaten"?"吃了 ✓":"拒食 ✕"}</span>
+        <span class="fl-when">${fmtD(l.date)}</span>
+        <span class="fl-what">${esc(l.prey)||"—"}${l.method?` · ${esc(l.method)}`:""}${(l.weight!==undefined&&l.weight!=="")?` · <span class="fl-wt">${esc(String(l.weight))} g</span>`:""}</span>
+        <button class="fl-del-log" data-id="${s.id}" data-lid="${l.id}" type="button" title="刪除">✕</button>
+        ${l.note?`<div class="fl-note">${esc(l.note)}</div>`:""}
+      </div>`).join("");
+  }
+  function dateMs(s){ const p=s.split("-").map(Number); return new Date(p[0],p[1]-1,p[2]).getTime(); }
+  function chartHTML(s){
+    const pts=(s.logs||[]).filter(l=>l.weight!==undefined&&l.weight!==""&&!isNaN(parseFloat(l.weight)))
+      .map(l=>({t:dateMs(l.date),w:parseFloat(l.weight),date:l.date}))
+      .sort((a,b)=>a.t-b.t);
+    if(pts.length<2) return "";
+    const W=560,H=150,pl=44,pr=16,pT=16,pb=28,iw=W-pl-pr,ih=H-pT-pb;
+    const ws=pts.map(p=>p.w),wmin=Math.min(...ws),wmax=Math.max(...ws);
+    const tmin=pts[0].t,tmax=pts[pts.length-1].t,pad=(wmax-wmin)||1,lo=wmin-pad*0.15,hi=wmax+pad*0.15;
+    const X=(p,i)=> tmax===tmin ? pl+iw*(i/(pts.length-1)) : pl+iw*((p.t-tmin)/(tmax-tmin));
+    const Y=w=> pT+ih*(1-(w-lo)/(hi-lo));
+    const xy=pts.map((p,i)=>[X(p,i),Y(p.w)]);
+    const linePath=xy.map((c,i)=>(i?"L":"M")+c[0].toFixed(1)+" "+c[1].toFixed(1)).join(" ");
+    const areaPath=`M${xy[0][0].toFixed(1)} ${(pT+ih).toFixed(1)} `+xy.map(c=>"L"+c[0].toFixed(1)+" "+c[1].toFixed(1)).join(" ")+` L${xy[xy.length-1][0].toFixed(1)} ${(pT+ih).toFixed(1)} Z`;
+    const dots=xy.map(c=>`<circle cx="${c[0].toFixed(1)}" cy="${c[1].toFixed(1)}" r="3.2" fill="var(--paper-2)" stroke="var(--rec)" stroke-width="2"/>`).join("");
+    const last=pts[pts.length-1],first=pts[0],lx=xy[xy.length-1];
+    const fmtMD=ds=>{const p=ds.split("-");return p[1]+"/"+p[2];};
+    return `<div class="fl-chart-wrap"><div class="fl-chart-cap">體重變化（${ws.length} 次量測）</div>
+      <svg class="fl-chart" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">
+        <line x1="${pl}" y1="${pT}" x2="${pl}" y2="${pT+ih}" stroke="var(--line)" stroke-width="1"/>
+        <line x1="${pl}" y1="${pT+ih}" x2="${W-pr}" y2="${pT+ih}" stroke="var(--line)" stroke-width="1"/>
+        <text x="${pl-6}" y="${(Y(wmax)+4).toFixed(1)}" text-anchor="end" font-size="12" fill="var(--ink-soft)">${wmax} g</text>
+        <text x="${pl-6}" y="${(Y(wmin)+4).toFixed(1)}" text-anchor="end" font-size="12" fill="var(--ink-soft)">${wmin} g</text>
+        <path d="${areaPath}" fill="rgba(122,108,168,.12)"/>
+        <path d="${linePath}" fill="none" stroke="var(--rec)" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+        ${dots}
+        <text x="${lx[0].toFixed(1)}" y="${(lx[1]-8).toFixed(1)}" text-anchor="middle" font-size="12.5" font-weight="700" fill="var(--rec)">${last.w} g</text>
+        <text x="${pl}" y="${H-8}" text-anchor="start" font-size="11.5" fill="var(--ink-soft)">${fmtMD(first.date)}</text>
+        <text x="${W-pr}" y="${H-8}" text-anchor="end" font-size="11.5" fill="var(--ink-soft)">${fmtMD(last.date)}</text>
+      </svg></div>`;
+  }
+  function snakeHTML(s){
+    const t=todayStr();
+    return `
+    <div class="fl-snake" data-id="${s.id}">
+      <div class="fl-head">
+        <div class="fl-id">
+          <input class="fl-in fl-name" data-id="${s.id}" data-f="name" value="${esc(s.name)}" placeholder="名字／編號">
+          <select class="fl-in" data-id="${s.id}" data-f="sex">
+            <option value="?"${s.sex==="?"?" selected":""}>性別未定</option>
+            <option value="\u2640"${s.sex==="\u2640"?" selected":""}>\u2640 母</option>
+            <option value="\u2642"${s.sex==="\u2642"?" selected":""}>\u2642 公</option>
+          </select>
+        </div>
+        <button class="ptbtn fl-del-snake" data-id="${s.id}" type="button">移除這條</button>
+      </div>
+      <div class="fl-meta">
+        <label>孵化日 <input type="date" class="fl-in" data-id="${s.id}" data-f="hatch" value="${s.hatch||""}"></label>
+        <label>基因 <input class="fl-in" data-id="${s.id}" data-f="morph" value="${esc(s.morph)}" placeholder="如 白化 het 無黃"></label>
+      </div>
+      <div class="fl-stats">${statsHTML(s)}</div>
+      ${chartHTML(s)}
+      <div class="fl-form">
+        <input type="date" class="fl-in j-date" value="${t}">
+        <select class="fl-in j-res"><option value="eaten">吃了 ✓</option><option value="refused">拒食 ✕</option></select>
+        <input class="fl-in j-weight" type="number" inputmode="decimal" min="0" step="0.1" placeholder="體重 g">
+        <input class="fl-in j-prey" placeholder="餌料（乳鼠…）">
+        <input class="fl-in j-method" placeholder="方式（素餵／鮪魚味／braining…）">
+        <input class="fl-in j-note" placeholder="備註（選填）">
+        <button class="ptbtn primary fl-log-add" data-id="${s.id}" type="button">記錄</button>
+      </div>
+      <div class="fl-log">${logsHTML(s)}</div>
+    </div>`;
+  }
+  function render(){
+    list.innerHTML=state.snakes.map(snakeHTML).join("");
+    empty.hidden=state.snakes.length>0;
+  }
+
+  addBtn.addEventListener("click",()=>{
+    state.snakes.push({id:uid(),name:"",sex:"?",hatch:"",morph:"",logs:[]});
+    save(); render();
+  });
+  clearBtn.addEventListener("click",()=>{
+    if(state.snakes.length && !confirm("確定要清除所有小蛇與餵食紀錄嗎？此動作無法復原。")) return;
+    state={snakes:[]}; save(); render();
+  });
+
+  function metaUpdate(e){
+    const el=e.target; if(!el.dataset||!el.dataset.f||!el.dataset.id) return;
+    const s=find(el.dataset.id); if(!s) return; s[el.dataset.f]=el.value; save();
+  }
+  list.addEventListener("input",metaUpdate);
+  list.addEventListener("change",metaUpdate);
+
+  list.addEventListener("click",e=>{
+    const add=e.target.closest(".fl-log-add");
+    if(add){ const card=add.closest(".fl-snake"), s=find(add.dataset.id); if(!s) return;
+      s.logs.push({ id:uid(),
+        date:card.querySelector(".j-date").value||todayStr(),
+        result:card.querySelector(".j-res").value,
+        weight:card.querySelector(".j-weight").value.trim(),
+        prey:card.querySelector(".j-prey").value.trim(),
+        method:card.querySelector(".j-method").value.trim(),
+        note:card.querySelector(".j-note").value.trim() });
+      save(); render(); return; }
+    const dl=e.target.closest(".fl-del-log");
+    if(dl){ const s=find(dl.dataset.id); if(s){ s.logs=s.logs.filter(l=>l.id!==dl.dataset.lid); save(); render(); } return; }
+    const ds=e.target.closest(".fl-del-snake");
+    if(ds){ const s=find(ds.dataset.id);
+      if(s && (!s.logs.length || confirm("移除「"+(s.name||"未命名")+"」與其所有紀錄？"))){
+        state.snakes=state.snakes.filter(x=>x.id!==ds.dataset.id); save(); render(); } return; }
+  });
+
+  render();
+})();
+
+/* ---------- Backup / restore ---------- */
+(function(){
+  const ex=document.getElementById("bk-export"),
+        im=document.getElementById("bk-import"),
+        file=document.getElementById("bk-file"),
+        msg=document.getElementById("bk-msg");
+  if(!ex) return;
+  const PREFIX="hognose.";
+  function show(t,ok){ msg.hidden=false; msg.textContent=t; msg.style.color=ok?"var(--ink-soft)":"var(--combo)"; }
+  function gather(){ const o={}; for(let i=0;i<localStorage.length;i++){ const k=localStorage.key(i); if(k&&k.indexOf(PREFIX)===0) o[k]=localStorage.getItem(k); } return o; }
+
+  ex.addEventListener("click",()=>{
+    const payload={app:"hognose",exported:new Date().toISOString(),data:gather()};
+    const n=Object.keys(payload.data).length;
+    if(!n){ show("目前沒有可備份的資料。",false); return; }
+    const blob=new Blob([JSON.stringify(payload,null,2)],{type:"application/json"});
+    const url=URL.createObjectURL(blob), a=document.createElement("a");
+    const d=new Date(), ds=d.getFullYear()+String(d.getMonth()+1).padStart(2,"0")+String(d.getDate()).padStart(2,"0");
+    a.href=url; a.download="hognose-backup-"+ds+".json"; document.body.appendChild(a); a.click();
+    a.remove(); URL.revokeObjectURL(url);
+    show("已匯出 "+n+" 項資料，請妥善保存這個檔案。",true);
+  });
+
+  im.addEventListener("click",()=>file.click());
+  file.addEventListener("change",()=>{
+    const f=file.files&&file.files[0]; if(!f) return;
+    const r=new FileReader();
+    r.onload=()=>{
+      try{
+        const obj=JSON.parse(r.result);
+        const d=(obj&&obj.data&&typeof obj.data==="object")?obj.data:obj;
+        const keys=Object.keys(d).filter(k=>k.indexOf(PREFIX)===0);
+        if(!keys.length){ show("這個檔案裡找不到可還原的資料。",false); file.value=""; return; }
+        if(!confirm("匯入將以備份內容覆蓋目前的紀錄（共 "+keys.length+" 項），確定要繼續嗎？")){ file.value=""; return; }
+        keys.forEach(k=>localStorage.setItem(k,d[k]));
+        show("已還原 "+keys.length+" 項，重新整理頁面中…",true);
+        setTimeout(()=>location.reload(),700);
+      }catch(e){ show("檔案格式不正確，無法匯入。",false); }
+      file.value="";
+    };
+    r.readAsText(f);
+  });
+})();
+
+render();
+</script>
+</body>
+</html>
